@@ -1,0 +1,245 @@
+# cyd-deck - configurazione del macropad
+# Il file viene ricaricato automaticamente quando lo salvi.
+# I colori arrivano da ~/.local/state/caelestia/scheme.json e seguono lo schema corrente.
+
+[device]
+port = "auto"        # "auto" oppure es. "/dev/ttyACM0"
+rotation = 1         # 1 = orizzontale, 3 = orizzontale capovolto (poi rilancia `cyd-deck calibrate`)
+bgr = true           # metti false se rosso e blu risultano scambiati
+invert = true        # Freenove 2.8": inversione attiva; metti false se i colori sono in negativo
+idle_timeout = 300   # secondi prima di spegnere lo schermo (0 = mai), un tocco lo riaccende
+
+[touch]              # generato da `cyd-deck calibrate`
+swap_xy = true
+invert_x = false
+invert_y = true
+
+[layout]
+cols = 4
+rows = 3
+gap = 8
+radius = 18
+poll_interval = 2.0  # secondi tra un aggiornamento e l'altro di state/label_cmd
+icon_font = "Material Symbols Rounded"
+text_font = "Rubik"
+
+# Ogni [[page.key]] occupa il posto successivo nella griglia (sinistra->destra, alto->basso).
+# Un [[page.key]] vuoto lascia uno spazio libero. Swipe orizzontale = cambio pagina.
+#
+# Campi di un tasto:
+#   icon        nome icona Material Symbols (https://fonts.google.com/icons)
+#   icon_active icona mostrata quando `state` è vero
+#   label       etichetta sotto l'icona
+#   exec        comando shell eseguito alla pressione
+#   action      next-page | prev-page | page:<nome> | backlight-off | reload
+#   state       comando shell: exit code 0 = tasto evidenziato
+#   label_cmd   comando shell il cui output diventa l'etichetta
+
+[[page]]
+name = "Caelestia"
+
+[[page.key]]
+icon = "apps"
+label = "Launcher"
+exec = "caelestia shell drawers toggle launcher"
+
+[[page.key]]
+icon = "dashboard"
+label = "Dashboard"
+exec = "caelestia shell drawers toggle dashboard"
+
+[[page.key]]
+icon = "notifications"
+label = "Notifiche"
+exec = "caelestia shell drawers toggle sidebar"
+
+[[page.key]]
+icon = "power_settings_new"
+label = "Sessione"
+exec = "caelestia shell drawers toggle session"
+
+[[page.key]]
+icon = "screenshot_region"
+label = "Screenshot"
+exec = "caelestia shell picker openFreeze"
+
+[[page.key]]
+icon = "content_paste"
+label = "Appunti"
+exec = "caelestia clipboard"
+
+[[page.key]]
+icon = "mood"
+label = "Emoji"
+exec = "caelestia emoji -p"
+
+[[page.key]]
+icon = "wallpaper"
+label = "Sfondo"
+exec = "caelestia wallpaper -r"
+
+[[page.key]]
+icon = "do_not_disturb_on"
+label = "Non disturb."
+exec = "caelestia shell notifs toggleDnd"
+state = '[ "$(caelestia shell notifs isDndEnabled)" = true ]'
+
+[[page.key]]
+icon = "sports_esports"
+label = "Game mode"
+exec = "caelestia shell gameMode toggle"
+state = '[ "$(caelestia shell gameMode isEnabled)" = true ]'
+
+[[page.key]]
+icon = "coffee"
+label = "Sempre on"
+exec = "caelestia shell idleInhibitor toggle"
+state = '[ "$(caelestia shell idleInhibitor isEnabled)" = true ]'
+
+[[page.key]]
+icon = "lock"
+label = "Blocca"
+exec = "caelestia shell lock lock"
+
+[[page]]
+name = "Media"
+
+[[page.key]]
+icon = "skip_previous"
+label = "Indietro"
+exec = "caelestia shell mpris previous"
+
+[[page.key]]
+icon = "play_arrow"
+icon_active = "pause"
+label = "Play"
+exec = "caelestia shell mpris playPause"
+state = '[ "$(playerctl status 2>/dev/null)" = Playing ]'
+
+[[page.key]]
+icon = "skip_next"
+label = "Avanti"
+exec = "caelestia shell mpris next"
+
+[[page.key]]
+icon = "music_note"
+label = "Musica"
+exec = "caelestia toggle music"
+
+[[page.key]]
+icon = "volume_down"
+label = "Vol -"
+exec = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+
+[[page.key]]
+icon = "volume_up"
+icon_active = "volume_off"
+label = "Muto"
+exec = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+state = "wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q MUTED"
+label_cmd = "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf \"%d%%\", $2*100}'"
+
+[[page.key]]
+icon = "volume_up"
+label = "Vol +"
+exec = "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"
+
+[[page.key]]
+icon = "speaker"
+label = "Uscita"
+exec = "caelestia shell audio cycleOutput"
+
+[[page.key]]
+icon = "mic"
+icon_active = "mic_off"
+label = "Microfono"
+exec = "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+state = "wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | grep -q MUTED"
+
+[[page.key]]
+icon = "videocam"
+label = "Registra"
+exec = "caelestia record -s"
+state = "pgrep -f '[g]pu-screen-recorder|[w]l-screenrec|[w]f-recorder' >/dev/null"
+
+[[page.key]]
+icon = "pause_circle"
+label = "Pausa reg."
+exec = "caelestia record -p"
+
+[[page.key]]
+icon = "shuffle"
+label = "Shuffle"
+exec = "playerctl shuffle toggle"
+state = '[ "$(playerctl shuffle 2>/dev/null)" = On ]'
+
+[[page]]
+name = "App"
+
+[[page.key]]
+icon = "terminal"
+label = "Terminale"
+exec = "foot"
+
+[[page.key]]
+icon = "public"
+label = "Browser"
+exec = "zen-browser"
+
+[[page.key]]
+icon = "folder"
+label = "File"
+exec = "nautilus"
+
+[[page.key]]
+icon = "code"
+label = "VS Code"
+exec = "code"
+
+[[page.key]]
+icon = "headphones"
+label = "Spotify"
+exec = "spotify"
+
+[[page.key]]
+icon = "forum"
+label = "Discord"
+exec = "discord"
+
+[[page.key]]
+icon = "monitoring"
+label = "Sysmon"
+exec = "caelestia toggle sysmon"
+
+[[page.key]]
+icon = "checklist"
+label = "Todo"
+exec = "caelestia toggle todo"
+
+[[page.key]]
+icon = "chat"
+label = "Social"
+exec = "caelestia toggle communication"
+
+[[page.key]]
+
+[[page.key]]
+icon = "dark_mode"
+label = "Off schermo"
+action = "backlight-off"
+
+[[page.key]]
+icon = "home"
+label = "Home"
+action = "page:Caelestia"
+
+# Pagina audio: lettore attivo di Caelestia e un cursore di volume per ogni app che suona.
+[[page]]
+name = "Audio"
+kind = "mixer"
+
+[page.mixer]
+player = true    # scheda del brano con copertina e controlli
+master = true    # volume generale
+mic = false      # volume del microfono
+hide = []        # app da non mostrare, es. ["Discord"]

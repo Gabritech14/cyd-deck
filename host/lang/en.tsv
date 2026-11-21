@@ -1,0 +1,682 @@
+# Traduzioni italiano → inglese. Una riga per testo: italiano<TAB>inglese.
+# "{}" è un valore inserito dal programma: deve restare lo stesso numero di volte.
+# Per aggiungere una lingua basta copiare questo file (es. de.tsv) e tradurre la seconda colonna.
+#
+# ---- Editor: azioni dei tasti e passi delle macro
+Nessuna	None
+Esegui comando	Run command
+Macro (più azioni in fila)	Macro (several actions in a row)
+Vai a una pagina	Go to a page
+Pagina successiva	Next page
+Pagina precedente	Previous page
+Spegni lo schermo	Turn screen off
+Ricarica config	Reload config
+Apri app / comando	Open app / command
+Vai al workspace	Go to workspace
+Attendi	Wait
+Azione del deck	Deck action
+Chiudi finestre	Close windows
+# ---- Editor: barra principale e stato
+Password del Wi-Fi non salvata: {}	Wi-Fi password not saved: {}
+Salvato: il deck si aggiorna da solo	Saved: the deck updates by itself
+Errore nel salvataggio: {}	Error while saving: {}
+La config è cambiata anche sul disco: al salvataggio vince l'editor	The config also changed on disk: saving will keep the editor's version
+Config ricaricata dal disco	Config reloaded from disk
+Tasti	Keys
+Store	Store
+Impostazioni	Settings
+Salva	Save
+Annulla modifiche	Undo changes
+Modifiche annullate	Changes undone
+Applica subito al deck	Apply to deck now
+Modifiche non salvate	Unsaved changes
+Pagina {}	Page {}
+{} · nascosta	{} · hidden
+Sposta a sinistra	Move left
+Sposta a destra	Move right
+Elimina pagina	Delete page
++ Pagina	+ Page
+Pagina di tasti	Key page
+Pagina audio (volumi e musica)	Audio page (volumes and music)
+Pagina limiti Claude	Claude limits page
+Pagina	Page
+Si apre da sola con	Opens by itself with
+Togli	Remove
+es. spotify	e.g. spotify
+Aggiungi	Add
+App aperte	Open apps
+Nessuna finestra aperta	No open windows
+Nascosta: si apre solo con queste app	Hidden: only opens with these apps
+aggiungi almeno un'app	add at least one app
+Nome pagina	Page name
+Anteprima dal vivo  ·  le opzioni della pagina sono a destra	Live preview  ·  page options are on the right
+Copia	Copy
+Incolla	Paste
+Prova comando	Test command
+Svuota	Clear
+Clic per modificare  ·  trascina per spostare  ·  tasto destro per copia/incolla	Click to edit  ·  drag to move  ·  right click to copy/paste
+# ---- Editor: pagina audio
+Pagina audio	Audio page
+Cosa mostrare	What to show
+Lettore musicale	Music player
+Il player attivo di Caelestia (lo stesso della dashboard), con copertina e controlli	The active media player (the same as the Caelestia dashboard), with cover art and controls
+Volume generale (uscita predefinita)	Master volume (default output)
+Microfono	Microphone
+Cursori	Sliders
+Verticali	Vertical
+Orizzontali	Horizontal
+App	Apps
+Nessuna app sta riproducendo audio adesso. Ogni app compare da sola, sul deck e qui, appena emette suoni.	No app is playing audio right now. Each app shows up by itself, on the deck and here, as soon as it makes a sound.
+Sul deck	On the deck
+Trascina un cursore in su o in giù per il volume	Drag a slider up or down for volume
+Tocca il nome sotto il cursore per il muto	Tap the name under the slider to mute
+Scorri di lato sui cursori se le app sono più di 5	Swipe sideways over the sliders if there are more than 5 apps
+Tocca la copertina per aprire il workspace musica di Caelestia	Tap the cover art to open Caelestia's music workspace
+Scorri di lato sulla scheda del lettore per cambiare pagina	Swipe sideways on the player card to change page
+Trascina un cursore per cambiare il volume	Drag a slider to change the volume
+Tocca icona o nome per il muto	Tap the icon or name to mute
+Scorri in verticale se le app sono tante	Scroll vertically if there are many apps
+Scorri in orizzontale sulla scheda del lettore per cambiare pagina	Swipe horizontally on the player card to change page
+# ---- Editor: pannello del tasto
+Seleziona un tasto da modificare	Select a key to edit
+Tasto {}	Key {}
+Tasto	Key
+Cursore volume	Volume slider
+Orologio	Clock
+Limiti Claude	Claude limits
+Stampante 3D	3D printer
+Come appare quando lo stato è attivo	How it looks when the state is active
+Aspetto	Look
+Icona	Icon
+Etichetta	Label
+Testo sotto l'icona	Text under the icon
+Azione	Action
+Cosa fa il tasto	What the key does
+es. foot -e btop	e.g. foot -e btop
+Prova	Test
+Esegue il comando adesso	Runs the command now
+Pagina da aprire	Page to open
+Parti da un preset:	Start from a preset:
+Stato dinamico (avanzato)	Dynamic state (advanced)
+Comando di stato: se esce con codice 0 il tasto si illumina	State command: if it exits with code 0 the key lights up
+es. pgrep -x spotify	e.g. pgrep -x spotify
+Icona quando è attivo	Icon when active
+Comando etichetta: il suo output sostituisce l'etichetta	Label command: its output replaces the label
+es. date +%H:%M	e.g. date +%H:%M
+Prova stato	Test state
+Duplica	Duplicate
+Copia nel primo spazio libero	Copy to the first free slot
+Svuota tasto	Clear key
+Volume di	Volume of
+Cosa regola	What it controls
+Generale (uscita predefinita)	Master (default output)
+oppure app	or app
+es. Spotify	e.g. Spotify
+Le app compaiono nell'elenco mentre suonano. Se l'app è chiusa il cursore resta grigio.	Apps show up in the list while they play. If the app is closed the slider stays grey.
+Dimensioni	Size
+Larghezza	Width
+Altezza	Height
+Copre i tasti vicini (restano salvati e ricompaiono se la rimpicciolisci). Trascinala per spostarla.	Covers the nearby keys (they stay saved and come back if you make it smaller). Drag it to move it.
+Trascina lungo il cursore per il volume	Drag along the slider for volume
+Tocca senza trascinare per il muto	Tap without dragging to mute
+Più alto che largo = verticale, altrimenti orizzontale	Taller than wide = vertical, otherwise horizontal
+Uso della sessione (5 ore) e della settimana, con il tempo all'azzeramento	Session (5 hours) and weekly usage, with the time until reset
+I dati arrivano da Claude Code e si aggiornano mentre lo usi	The data comes from Claude Code and updates while you use it
+Grande 2 righe mostra tutto; su una riga la sessione; su un tasto solo la percentuale	2 rows tall shows everything; one row shows the session; a single key only the percentage
+Barra di avanzamento, percentuale, tempo rimanente, strato e temperature	Progress bar, percentage, time left, layer and temperatures
+Su una riga: barra e dettagli; grande 2 righe: tutto più in grande; su un tasto solo la percentuale	One row: bar and details; 2 rows tall: everything bigger; a single key only the percentage
+Qui sotto è un'anteprima d'esempio: sul deck arrivano i dati veri della stampante	Below is a sample preview: the deck shows the printer's real data
+Ora e data, aggiornate ogni minuto	Time and date, updated every minute
+Su un tasto solo la data compare se c'è spazio: allargalo a 2 per vederla bene	On a single key the date only shows if there's room: make it 2 wide to see it well
+Tocca indietro, play/pausa e avanti per il lettore di Caelestia	Tap previous, play/pause and next to control the player
+Tocca la copertina per il workspace musica	Tap the cover art for the music workspace
+Su un tasto solo: tocca per play/pausa	On a single key: tap for play/pause
+Scegli un'icona	Choose an icon
+nome icona	icon name
+non trovata	not found
+Scegli…	Choose…
+Preset…	Presets…
+Applicazioni	Applications
+Cerca app	Search apps
+nome…	name…
+# ---- Editor: macro
+I passi partono in ordine. Con "Apri sul workspace" vai su quel workspace e l'app si apre lì, anche se ci mette un po'.	Steps run in order. With "Open on workspace" you move to that workspace and the app opens there, even if it takes a while.
+Rimuovi passo	Remove step
+Sposta giù	Move down
+Sposta su	Move up
+comando, es. spotify	command, e.g. spotify
+Apri sul workspace	Open on workspace
+Aspetta che finisca	Wait for it to finish
+In background (apri lì ma non spostarti)	In background (open there but don't move)
+App…	Apps…
+Del workspace attuale	Of the current workspace
+Di un workspace	Of a workspace
+Tutte	All
+Finestre	Windows
+es. 2	e.g. 2
+Anche i workspace speciali (musica, social, ...)	Special workspaces too (music, social, ...)
+Le app ricevono una normale richiesta di chiusura (possono chiederti di salvare). L'editor cyd-deck resta aperto.	Apps get a normal close request (they may ask you to save). The CYD Deck editor stays open.
+Workspace	Workspace
+1, +1, special:music	1, +1, special:music
+Vai a: {}	Go to: {}
+Pausa tra un passo e l'altro	Pause between steps
+0 = nessuna	0 = none
++ Aggiungi passo	+ Add step
+Apri un'app	Open an app
+Comando da preset	Command from preset
+Comando personalizzato	Custom command
+Prova macro	Test macro
+Esegue i passi adesso (le azioni del deck vengono saltate)	Runs the steps now (deck actions are skipped)
+in esecuzione…	running…
+stato: {}	state: {}
+ATTIVO	ACTIVE
+non attivo	not active
+etichetta: "{}"	label: "{}"
+Cerca in inglese: volume, music, home, light…	Search in English: volume, music, home, light…
+{} icone (mostrate le prime {}, affina la ricerca)	{} icons (showing the first {}, refine your search)
+{} icone	{} icons
+# ---- Editor: portachiavi, stampante, Home Assistant
+Portachiavi	Keyring
+Portachiavi cyd-deck chiuso: i tasti di Home Assistant aspettano che lo sblocchi.	cyd-deck keyring locked: Home Assistant keys wait until you unlock it.
+Portachiavi cyd-deck aperto fino al logout, o finché non lo blocchi.	cyd-deck keyring unlocked until you log out, or until you lock it.
+Crea portachiavi protetto	Create protected keyring
+Ti chiede la nuova password e ci sposta i segreti	Asks for a new password and moves the secrets into it
+Sblocca	Unlock
+Blocca ora	Lock now
+Stampante 3D (Bambu Lab)	3D printer (Bambu Lab)
+Collegamento in LAN. Il codice di accesso è sullo schermo della stampante (Impostazioni, WLAN) e va nel portachiavi.	LAN connection. The access code is on the printer's screen (Settings, WLAN) and is stored in the keyring.
+Indirizzo IP	IP address
+Numero di serie	Serial number
+Codice di accesso	Access code
+salvato ✓ (scrivine uno nuovo per sostituirlo)	saved ✓ (type a new one to replace it)
+8 caratteri	8 characters
+Codice della stampante salvato nel portachiavi	Printer code saved in the keyring
+Codice non salvato: {}	Code not saved: {}
+Elimina	Delete
+Prova collegamento	Test connection
+Prima salva la config	Save the config first
+Home Assistant	Home Assistant
+Le entità compaiono nello Store. Il token sta nel portachiavi del sistema, non nella config: qui non si rivede.	Entities show up in the Store. The token is kept in the system keyring, not in the config: it can't be viewed here again.
+Indirizzo	Address
+Token	Token
+incolla il token a lunga durata	paste the long-lived token
+Token salvato nel portachiavi	Token saved in the keyring
+Token non salvato: {}	Token not saved: {}
+Token eliminato dal portachiavi	Token removed from the keyring
+Collegato a {}	Connected to {}
+# ---- Editor: store e plugin
+Plugin ricaricati: {} dai file	Plugins reloaded: {} from files
+Non riesco a creare {}: {}	Can't create {}: {}
+Categorie	Categories
+Tutte  ({})	All  ({})
+Plugin tuoi	Your plugins
+File .toml nella cartella dei plugin: ognuno può contenere più funzioni.	.toml files in the plugin folder: each one can hold several functions.
+Apri cartella plugin	Open plugin folder
+Ricarica plugin	Reload plugins
+{} entità utilizzabili	{} usable entities
+Aggiorna da Home Assistant	Refresh from Home Assistant
+Cerca	Search
+volume, screenshot, workspace, firefox…	volume, screenshot, workspace, firefox…
+Aggiungi a	Add to
+Nessuna funzione trovata	No functions found
+Aggiungi ancora	Add again
+Aggiungi «{}» al primo posto libero	Add “{}” to the first free slot
+già sul deck	already on the deck
+{} è piena: libera un tasto o scegli un'altra pagina	{} is full: free up a key or choose another page
+«{}» aggiunto a {}, tasto {}	“{}” added to {}, key {}
+# ---- Editor: impostazioni
+Griglia	Grid
+Colonne	Columns
+Righe	Rows
+Spazio tra i tasti	Gap between keys
+Arrotondamento	Corner radius
+Schermo	Screen
+Orientamento	Orientation
+Verticale	Portrait
+Orizzontale	Landscape
+Verticale capovolto	Portrait (flipped)
+Orizzontale capovolto	Landscape (flipped)
+Spegnimento automatico	Auto screen off
+0 = mai	0 = never
+Colori	Colors
+Inversione	Inversion
+Ordine BGR	BGR order
+Porta seriale	Serial port
+Barra in alto	Top bar
+Mostra la barra di stato sul deck	Show the status bar on the deck
+Ora	Time
+USB / Wi-Fi	USB / Wi-Fi
+Batteria	Battery
+Wi-Fi della scheda	Board Wi-Fi
+Rete (SSID)	Network (SSID)
+vuoto = Wi-Fi spento	empty = Wi-Fi off
+Rete attuale	Current network
+Usa la rete a cui è collegato il PC	Use the network the PC is connected to
+Password	Password
+nel portachiavi chiuso	in the locked keyring
+Indirizzo fisso	Fixed address
+vuoto = la trova da solo	empty = find it automatically
+Codice di abbinamento	Pairing code
+Nuovo codice	New code
+La scheda va ricollegata via USB per riceverlo	The board must be reconnected via USB to receive it
+Touch	Touch
+Scambia X/Y	Swap X/Y
+Inverti X	Invert X
+Inverti Y	Invert Y
+Per calibrarlo in automatico chiudi il demone e lancia `cyd-deck calibrate`.	To calibrate it automatically, stop the background app and run `cyd-deck calibrate`.
+Aggiornamento stati	State refresh
+Ogni	Every
+per i tasti con comando di stato o etichetta	for keys with a state or label command
+Font	Fonts
+Icone	Icons
+Testo	Text
+Applica font all'anteprima	Apply fonts to the preview
+Font: {}	Fonts: {}
+Principale	Main
+Lingua	Language
+# ---- Editor: tema
+Tema	Theme
+Colori di Caelestia (automatici)	Caelestia colors (automatic)
+Usa lo schema di Caelestia e cambia insieme allo sfondo	Uses the Caelestia scheme and changes with your wallpaper
+Colore principale	Accent color
+Chiaro	Light
+Scuro	Dark
+Ambra	Amber
+Oceano	Ocean
+Foresta	Forest
+Lavanda	Lavender
+Ciliegia	Cherry
+Grafite	Graphite
+Limone	Lemon
+Menta	Mint
+Personalizzato	Custom
+Scegli un tema pronto o un colore tuo: tutto il resto si adatta da solo.	Pick a ready-made theme or your own color: everything else adapts by itself.
+Caelestia non trovato: si usa il tema scelto qui sotto.	Caelestia not found: using the theme chosen below.
+# ---- Guida rapida
+Benvenuto in CYD Deck	Welcome to CYD Deck
+Guida rapida	Quick start
+Avanti	Next
+Indietro	Back
+Salta	Skip
+Fine	Done
+Inizia	Get started
+Passo {} di {}	Step {} of {}
+Riapri la guida rapida	Open the quick start again
+CYD Deck trasforma uno schermo touch ESP32 da pochi euro in un macropad: tasti con icone, pagine, mixer audio e molto altro. Ti servono pochi minuti per partire.	CYD Deck turns a cheap ESP32 touch screen into a macropad: keys with icons, pages, an audio mixer and much more. Getting started takes a few minutes.
+In che lingua vuoi l'interfaccia?	Which language do you want the interface in?
+Collega la scheda	Connect the board
+Collega la scheda al PC con un cavo USB-C dati. Se non hai ancora flashato il firmware, segui il README (sezione 1).	Connect the board to the PC with a USB-C data cable. If you haven't flashed the firmware yet, follow the README (section 1).
+Scheda trovata via USB	Board found over USB
+Nessuna scheda via USB per ora (va bene anche più tardi, o via Wi-Fi).	No board over USB for now (that's fine, you can also connect it later or over Wi-Fi).
+Controlla di nuovo	Check again
+Il programma in background è attivo	The background app is running
+Il programma in background non è attivo: avvialo con `cyd-deck` (o all'avvio del desktop).	The background app isn't running: start it with `cyd-deck` (or at login).
+Se il tocco finisce nel tasto sbagliato, chiudi il programma in background e lancia `cyd-deck calibrate`.	If touches land on the wrong key, stop the background app and run `cyd-deck calibrate`.
+Scegli i colori	Pick the colors
+Le tue pagine	Your pages
+Da dove vuoi partire?	Where do you want to start from?
+Tieni le pagine attuali	Keep the current pages
+Pagine di esempio	Sample pages
+Media, app e sistema: da modificare come vuoi	Media, apps and system: edit them however you like
+Pagina vuota	Empty page
+Una griglia vuota da riempire dallo Store	An empty grid to fill from the Store
+Tutto pronto!	All set!
+Clic su un tasto per modificarlo, trascinalo per spostarlo.	Click a key to edit it, drag it to move it.
+Nello Store trovi centinaia di funzioni pronte da aggiungere.	In the Store you'll find hundreds of ready-made functions to add.
+Con "+ Pagina" aggiungi pagine di tasti, audio o widget.	With "+ Page" you can add key, audio or widget pages.
+Il Wi-Fi della scheda si imposta in Impostazioni.	The board's Wi-Fi is set up in Settings.
+Le modifiche arrivano sul deck appena salvi.	Changes reach the deck as soon as you save.
+Media	Media
+Sistema	System
+# ---- Preset: gruppi
+Caelestia	Caelestia
+Media e audio	Media and audio
+Hyprland	Hyprland
+Energia e hardware	Power and hardware
+Rete e telefono	Network and phone
+Aggiornamenti	Updates
+Sviluppo e AI	Development and AI
+Utilità	Utilities
+App e giochi	Apps and games
+I miei plugin	My plugins
+HA · Luci	HA · Lights
+HA · Interruttori	HA · Switches
+HA · Tapparelle	HA · Covers
+HA · Media	HA · Media
+HA · Scene e script	HA · Scenes and scripts
+HA · Sensori	HA · Sensors
+HA · Clima	HA · Climate
+HA · Altro	HA · Other
+# ---- Preset: nomi ed etichette
+Launcher	Launcher
+Dashboard	Dashboard
+Sidebar notifiche	Notification sidebar
+Notifiche	Notifications
+Menu sessione	Session menu
+Sessione	Session
+Blocca schermo	Lock screen
+Blocca	Lock
+Screenshot area	Area screenshot
+Screenshot	Screenshot
+Screenshot negli appunti	Screenshot to clipboard
+Ritaglia	Snip
+Screenshot schermo intero	Full screen screenshot
+Registra schermo	Record screen
+Registra	Record
+Registra area	Record area
+Reg. area	Rec. area
+Pausa registrazione	Pause recording
+Pausa reg.	Pause rec.
+Cronologia appunti	Clipboard history
+Appunti	Clipboard
+Emoji	Emoji
+Sfondo casuale	Random wallpaper
+Sfondo	Wallpaper
+Non disturbare	Do not disturb
+Non disturb.	DND
+Game mode	Game mode
+Game mode: attiva	Game mode: on
+Game ON	Game ON
+Game mode: disattiva	Game mode: off
+Game OFF	Game OFF
+Non disturbare: attiva	Do not disturb: on
+DND ON	DND ON
+Non disturbare: disattiva	Do not disturb: off
+DND OFF	DND OFF
+Inibisci sospensione	Keep awake
+Sempre on	Awake
+Cancella notifiche	Clear notifications
+Pulisci	Clear
+Workspace musica	Music workspace
+Musica	Music
+Workspace social	Social workspace
+Social	Social
+Workspace sysmon	Sysmon workspace
+Sysmon	Sysmon
+Workspace todo	Todo workspace
+Todo	Todo
+Play / pausa	Play / pause
+Play	Play
+Brano precedente	Previous track
+Brano successivo	Next track
+Stop	Stop
+Muto (con volume)	Mute (with volume)
+Muto	Mute
+Volume +5%	Volume +5%
+Vol +	Vol +
+Volume -5%	Volume -5%
+Vol -	Vol -
+Microfono muto	Mute microphone
+Cambia uscita audio	Switch audio output
+Uscita	Output
+Shuffle	Shuffle
+Brano attuale	Current track
+Brano	Track
+Avanti 10 secondi	Forward 10 seconds
++10 s	+10 s
+Indietro 10 secondi	Back 10 seconds
+-10 s	-10 s
+Volume microfono	Microphone volume
+Mic	Mic
+Chiudi finestra	Close window
+Chiudi	Close
+Schermo intero	Fullscreen
+Fullscreen	Fullscreen
+Massimizza	Maximize
+Finestra flottante	Floating window
+Flottante	Float
+Fissa finestra	Pin window
+Pin	Pin
+Workspace precedente	Previous workspace
+WS -	WS -
+Workspace successivo	Next workspace
+WS +	WS +
+Workspace 1	Workspace 1
+Workspace 2	Workspace 2
+Workspace 3	Workspace 3
+Workspace 4	Workspace 4
+Color picker	Color picker
+Colore	Color
+Finestra attiva	Active window
+Finestra	Window
+Workspace attuale	Current workspace
+WS	WS
+Ricarica Hyprland	Reload Hyprland
+Ricarica	Reload
+Profilo energetico (cambia)	Power profile (cycle)
+Profilo	Profile
+Risparmio energetico	Power saver
+Risparmio	Saver
+Prestazioni massime	Max performance
+Turbo	Turbo
+Batteria del PC	PC battery
+Temperatura CPU	CPU temperature
+CPU	CPU
+GPU NVIDIA	NVIDIA GPU
+GPU	GPU
+Uso CPU	CPU usage
+Memoria RAM	RAM usage
+RAM	RAM
+Ventola	Fan
+Spazio libero su disco	Free disk space
+Disco	Disk
+Luminosità +10%	Brightness +10%
+Lum +	Bright +
+Luminosità -10%	Brightness -10%
+Lum -	Bright -
+Luce notturna	Night light
+Notte	Night
+Bluetooth	Bluetooth
+Rete	Network
+IP locale	Local IP
+IP	IP
+IP pubblico	Public IP
+IP pubbl.	Public IP
+Ping internet	Internet ping
+Ping	Ping
+Hotspot del deck	Deck hotspot
+Hotspot	Hotspot
+Trova il telefono	Find my phone
+Trova tel.	Find phone
+Invia appunti al telefono	Send clipboard to phone
+Al tel.	To phone
+Batteria del telefono	Phone battery
+Telefono	Phone
+Aggiornamenti disponibili	Available updates
+Update	Updates
+Aggiorna il sistema	Update the system
+Aggiorna	Update
+Aggiorna i Flatpak	Update Flatpaks
+Flatpak	Flatpak
+Pacchetti orfani	Orphan packages
+Orfani	Orphans
+Pulisci la cache dei pacchetti	Clean the package cache
+Notizie di Arch Linux	Arch Linux news
+News Arch	Arch news
+VS Code	VS Code
+Open WebUI	Open WebUI
+WebUI	WebUI
+SearXNG	SearXNG
+Cerca gli appunti su SearXNG	Search the clipboard on SearXNG
+Ollama: libera la memoria	Ollama: free memory
+Ollama	Ollama
+Alpaca	Alpaca
+Container Docker attivi	Running Docker containers
+Docker	Docker
+Riavvia Open WebUI	Restart Open WebUI
+Riavvia UI	Restart UI
+Testo dallo schermo (OCR)	Text from screen (OCR)
+OCR	OCR
+Pomodoro 25 minuti	Pomodoro 25 minutes
+Pomodoro	Pomodoro
+Timer 5 minuti	5 minute timer
+5 min	5 min
+Meteo	Weather
+Calcolatrice	Calculator
+Calcola	Calc
+Calendario	Calendar
+Svuota appunti	Clear clipboard
+Traduci gli appunti	Translate the clipboard
+Traduci	Translate
+Apri il link negli appunti	Open the link in the clipboard
+Apri link	Open link
+Informazioni di sistema	System information
+Info	Info
+Log di sistema	System log
+Log	Log
+File	Files
+Cartella Download	Downloads folder
+Download	Downloads
+Tempo acceso	Uptime
+Acceso	Uptime
+Firefox	Firefox
+Firefox privato	Firefox private
+Privato	Private
+Spotify	Spotify
+Discord	Discord
+Steam	Steam
+Steam Big Picture	Steam Big Picture
+Big Picture	Big Picture
+Heroic Games Launcher	Heroic Games Launcher
+Heroic	Heroic
+Cemu (Wii U)	Cemu (Wii U)
+Cemu	Cemu
+Ryujinx (Switch)	Ryujinx (Switch)
+Ryujinx	Ryujinx
+Bambu Studio	Bambu Studio
+Bambu	Bambu
+OpenSCAD	OpenSCAD
+LibreOffice	LibreOffice
+Office	Office
+VLC	VLC
+Avanzamento stampa	Print progress
+Stampa	Print
+Tempo rimanente	Time left
+Tempo	Time
+Temperature ugello / piatto	Nozzle / bed temperatures
+Temp.	Temp.
+Strato attuale	Current layer
+Strato	Layer
+Pausa stampa	Pause print
+Pausa	Pause
+Riprendi stampa	Resume print
+Riprendi	Resume
+Ferma stampa (doppio tocco)	Stop print (double tap)
+Stop x2	Stop x2
+Luce stampante	Printer light
+Luce	Light
+Stato della stampante	Printer status
+Stampante	Printer
+File in stampa	File being printed
+Apri Bambu Studio	Open Bambu Studio
+Terminale	Terminal
+Claude Code	Claude Code
+Claude	Claude
+Monitor risorse	Resource monitor
+btop	btop
+Sospendi	Suspend
+Riavvia	Restart
+Spegni	Shut down
+Esci dalla sessione	Log out
+Esci	Log out
+Apri URL	Open URL
+Web	Web
+Batteria del deck	Deck battery
+# ---- Preset: descrizioni
+Titolo del brano sul tasto; premi per play/pausa	Track title on the key; press for play/pause
+Passa da risparmio a bilanciato a prestazioni; l'etichetta mostra quello attivo	Cycles power saver, balanced and performance; the label shows the active one
+Carica del portatile; si illumina mentre è in carica	Laptop charge; lights up while charging
+GPU NVIDIA: temperatura e consumo	NVIDIA GPU: temperature and power draw
+Schermo più caldo la sera (hyprsunset a 4000 K)	Warmer screen in the evening (hyprsunset at 4000 K)
+Aggiornato ogni 30 minuti	Updated every 30 minutes
+Latenza verso 1.1.1.1; acceso se internet risponde	Latency to 1.1.1.1; lit if the internet answers
+Acceso se l'hotspot cyd-deck-ap è attivo (solo stato)	Lit if the cyd-deck-ap hotspot is up (status only)
+Fa squillare il telefono con KDE Connect	Rings your phone with KDE Connect
+Via KDE Connect; si illumina mentre carica	Via KDE Connect; lights up while charging
+Pacchetti da aggiornare (repo + AUR), ricontrollati ogni 30 minuti; premi per aggiornare	Packages to update (repos + AUR), rechecked every 30 minutes; press to update
+Da leggere prima di un aggiornamento grosso	Worth reading before a big update
+Acceso se il container risponde	Lit if the container responds
+Mostra quanti modelli sono in memoria; premi per scaricarli e liberare VRAM	Shows how many models are loaded; press to unload them and free VRAM
+Seleziona un'area: il testo finisce negli appunti (inglese; per l'italiano installa tesseract-data-ita)	Select an area: the text goes to the clipboard (English; install other tesseract-data packages for more languages)
+Conto alla rovescia sul tasto e notifica alla fine; premi di nuovo per annullare	Countdown on the key and a notification at the end; press again to cancel
+Temperatura attuale (aggiornata ogni 30 minuti); premi per le previsioni	Current temperature (updated every 30 minutes); press for the forecast
+# ---- Sul deck
+Apri Claude Code	Open Claude Code
+5 ore	5 hours
+Sessione (5 ore)	Session (5 hours)
+sett. {}%	week {}%
+nuova finestra	new window
+si azzera tra {}	resets in {}
+{} min fa	{} min ago
+Stampante offline	Printer offline
+strato {}  ·  {}	layer {}  ·  {}
+ugello / piatto	nozzle / bed
+ultima: {}	last: {}
+Niente in riproduzione	Nothing playing
+Tocca per la musica	Tap for music
+Nessun audio	No audio
+{} min	{} min
+{} h {} min	{} h {} min
+{} g {} h	{} d {} h
+# ---- Messaggi del programma
+connesso a {}	connected to {}
+sessione terminata: {}	session ended: {}
+scheda scollegata	board disconnected
+in attesa della scheda (USB o Wi-Fi)...	waiting for the board (USB or Wi-Fi)...
+in attesa della scheda...	waiting for the board...
+attenzione: icona '{}' (pagina '{}') non trovata nel font	warning: icon '{}' (page '{}') not found in the font
+wifi: manca il codice di abbinamento, apri l'editor (Impostazioni → Wi-Fi) per generarlo	wifi: pairing code missing, open the editor (Settings → Wi-Fi) to generate it
+wifi: portachiavi bloccato, la rete sulla scheda resta com'è	wifi: keyring locked, the network on the board stays as it is
+wifi della scheda: connesso, {}	board wifi: connected, {}
+wifi: rete '{}' salvata sulla scheda, che si riavvia	wifi: network '{}' saved on the board, which is restarting
+wifi: disattivato sulla scheda, che si riavvia	wifi: turned off on the board, which is restarting
+la scheda non è riuscita a salvare il Wi-Fi	the board couldn't save the Wi-Fi settings
+la scheda non ha confermato il salvataggio del Wi-Fi	the board didn't confirm saving the Wi-Fi settings
+config ricaricata	config reloaded
+config non valida, tengo la precedente: {}	invalid config, keeping the previous one: {}
+pagina '{}' inesistente	page '{}' doesn't exist
+azione sconosciuta: {}	unknown action: {}
+creata config di default in {}	created default config in {}
+impossibile creare la config: {}	can't create the config: {}
+schema Caelestia non leggibile ({}), uso i colori di default	Caelestia scheme not readable ({}), using the default colors
+la scheda ha rifiutato il codice	the board rejected the pairing code
+la scheda non ha dimostrato di conoscere il codice	the board didn't prove it knows the pairing code
+{} non è una scheda cyd-deck	{} is not a CYD Deck board
+la scheda non risponde: il firmware cyd-deck è flashato?	the board doesn't answer: is the CYD Deck firmware flashed?
+scheda non trovata (prova `cyd-deck ports`)	board not found (try `cyd-deck ports`)
+Tocca il centro del mirino ({}/3)	Tap the center of the target ({}/3)
+tocca il mirino {}/3 sullo schermo...	tap target {}/3 on the screen...
+salvato in {}	saved to {}
+sezione [touch] non trovata: copia i valori qui sopra in {}	[touch] section not found: copy the values above into {}
+Calibrazione completata	Calibration complete
+indirizzo di Home Assistant non impostato (editor → Impostazioni)	Home Assistant address not set (editor → Settings)
+token di Home Assistant non salvato (editor → Impostazioni)	Home Assistant token not saved (editor → Settings)
+Home Assistant non raggiungibile su {}	Home Assistant not reachable at {}
+Home Assistant ha rifiutato il token (scaduto o sbagliato?)	Home Assistant rejected the token (expired or wrong?)
+entità o servizio inesistente in Home Assistant	entity or service not found in Home Assistant
+Home Assistant ha risposto con errore {}	Home Assistant answered with error {}
+risposta di Home Assistant non valida	invalid response from Home Assistant
+portachiavi non disponibile: {}	keyring not available: {}
+portachiavi cyd-deck chiuso	cyd-deck keyring locked
+portachiavi cyd-deck: in attesa della password	cyd-deck keyring: waiting for the password
+portachiavi cyd-deck non sbloccato	cyd-deck keyring not unlocked
+il portachiavi cyd-deck esiste già	the cyd-deck keyring already exists
+portachiavi non creato: {}	keyring not created: {}
+il portachiavi cyd-deck non esiste	the cyd-deck keyring doesn't exist
+HA · Automazioni	HA · Automations
+HA · Persone	HA · People
+errore: {}	error: {}
+Collega la scheda via USB una volta con il programma acceso: riceve la rete e da lì funziona anche senza cavo. Solo reti a 2,4 GHz.	Connect the board via USB once while the app is running: it receives the network and from then on works without a cable too. 2.4 GHz networks only.
+Browser	Browser
+Off schermo	Screen off
+Home	Home
+Audio	Audio
+settimana	week
+Settimana	Week
+adesso	just now
+{} h fa	{} h ago
+rimanente	left
+strato	layer
+Quando una di queste app va in primo piano il deck passa a questa pagina, e torna alla precedente quando la lasci. Basta una parte del nome (classe della finestra).	When one of these apps comes into focus the deck switches to this page, and goes back to the previous one when you leave it. Part of the name is enough (window class).
+Lo swipe sul deck la salta: compare quando apri una delle app qui sopra (o con un tasto "Vai a una pagina") e sparisce quando la lasci.	Swiping on the deck skips it: it shows up when you open one of the apps above (or with a "Go to a page" key) and disappears when you leave it.
+Token e password del Wi-Fi stanno nel portachiavi di login, aperto quando entri. Con un portachiavi dedicato, che ha una password sua, restano chiusi finché non lo sblocchi: la finestra compare al primo uso.	Tokens and the Wi-Fi password are kept in the login keyring, unlocked when you log in. With a dedicated keyring that has its own password they stay locked until you unlock it: the prompt appears on first use.

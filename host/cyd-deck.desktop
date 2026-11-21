@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=CYD Deck
+GenericName=Editor macropad
+Comment=Modifica i tasti del macropad CYD Deck
+Exec=cyd-deck gui
+Icon=input-keyboard
+Categories=Utility;
+Keywords=stream;deck;macropad;cyd;esp32;
+StartupWMClass=cyd-deck

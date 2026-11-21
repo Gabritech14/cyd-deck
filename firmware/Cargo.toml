@@ -1,0 +1,34 @@
+[package]
+name = "cyd-deck-fw"
+version = "0.2.0"
+edition = "2024"
+description = "CYD Deck firmware for the Freenove ESP32-S3 Display 2.8\" (FNK0104)"
+license = "MIT"
+
+[dependencies]
+esp-hal = { version = "1.2", features = ["esp32s3", "unstable"] }
+esp-bootloader-esp-idf = { version = "0.6", features = ["esp32s3", "embedded-storage"] }
+esp-rtos = { version = "0.4", features = ["esp32s3", "embassy", "esp-radio", "esp-alloc"] }
+esp-radio = { version = "=1.0.0-beta.1", features = ["esp32s3", "wifi", "unstable"] }
+esp-alloc = { version = "0.11", features = ["esp32s3"] }
+esp-storage = { version = "0.10", features = ["esp32s3", "embedded-storage"] }
+embassy-executor = "0.10"
+embassy-net = { version = "0.9", features = ["tcp", "udp", "dhcpv4", "medium-ethernet"] }
+embassy-time = "0.5"
+embassy-sync = "0.8"
+embassy-futures = "0.1"
+embedded-io-async = "0.7"
+embedded-storage = "0.3"
+static_cell = "2.1"
+heapless = "0.8"
+sha2 = { version = "0.10", default-features = false }
+embedded-graphics = "0.8"
+
+[profile.dev]
+opt-level = "s"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+debug = false
