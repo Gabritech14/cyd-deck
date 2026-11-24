@@ -1,0 +1,45 @@
+# Compila l'AppImage del programma per il PC e la allega alla release.
+# Builds the desktop app AppImage and attaches it to the release.
+name: Release builds
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release to attach the AppImage to (empty = build only)"
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  appimage:
+    # Ubuntu 22.04: la glibc più vecchia rende l'AppImage compatibile con più distro.
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: System libraries
+        run: sudo apt-get update && sudo apt-get install -y libudev-dev pkg-config
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build
+        working-directory: host
+        run: cargo build --release --locked
+      - name: Test
+        working-directory: host
+        run: cargo test --release --locked
+      - name: AppImage
+        run: |
+          mkdir -p dist
+          host/packaging/build-appimage.sh host/target/release/cyd-deck dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: appimage
+          path: dist/*.AppImage
+      - name: Attach to the release
+        if: github.ref_type == 'tag' || inputs.tag != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: gh release upload "$TAG" dist/*.AppImage --clobber

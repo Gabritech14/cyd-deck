@@ -16,7 +16,7 @@ An open source, Stream Deck-style touch macropad for the Freenove ESP32-S3 2.8" 
 
 <p align="center">🇮🇹 <a href="README.it.md">Leggilo in italiano</a></p>
 
-**Quick start:** [flash the board from your browser](https://gabritech14.github.io/cyd-deck/) → [install the desktop app](#getting-it-running) → open the editor and follow the short guide.
+**Quick start:** [flash the board from your browser](https://gabritech14.github.io/cyd-deck/) → [download the desktop app (AppImage)](https://github.com/Gabritech14/cyd-deck/releases/latest) → open the editor and follow the short guide.
 
 I wanted a Stream Deck but didn't want to pay for one, so I built my own out of a ~€20 ESP32 board with a
 2.8" touch screen. It turned into a bit more than a grid of buttons: pages that switch on their own when you
@@ -40,9 +40,8 @@ for, it helps me decide what to do first.
 - Freenove FNK0104 board and a USB-C cable that carries data
 - optional: a 1S LiPo with the board's connector (read [Safety](#safety) first)
 - the 3D printed case (MakerWorld link coming)
-- on the PC: Rust, the **Material Symbols Rounded** and **Rubik** fonts, `fc-match`.
-  `wpctl` (PipeWire) and `playerctl` for the audio stuff, Hyprland for pages that follow the focused app.
-  Caelestia is a nice extra, not a requirement.
+- on the PC: Linux (x86_64). `wpctl` (PipeWire) and `playerctl` for the audio stuff, Hyprland for pages
+  that follow the focused app. Caelestia is a nice extra, not a requirement.
 
 ## Getting it running
 
@@ -61,20 +60,35 @@ cd firmware && cargo run --release && cd ..
 
 If flashing doesn't start: hold BOOT, tap RESET, let go of BOOT.
 
-**2. Install the desktop app** (from the cloned folder):
+**2. Get the desktop app.** Download `CYD_Deck-…-x86_64.AppImage` from the [latest release](https://github.com/Gabritech14/cyd-deck/releases/latest),
+make it executable and open it:
+
+```sh
+chmod +x CYD_Deck-*-x86_64.AppImage
+./CYD_Deck-*-x86_64.AppImage            # the editor
+./CYD_Deck-*-x86_64.AppImage install    # add it to the app menu and start it at login
+```
+
+The first time you open the editor a short guide walks you through language, colors and starting pages,
+and can start the background app (the part that actually drives the deck) for you. Everything else works
+the same as below: just use the AppImage where it says `cyd-deck` (`./CYD_Deck…AppImage calibrate`, and so on).
+Fonts are built in, there's nothing else to install.
+
+Or build it yourself (needs [Rust](https://rustup.rs)), from the cloned folder:
 
 ```sh
 git clone https://github.com/Gabritech14/cyd-deck.git && cd cyd-deck   # if you haven't already
 cargo install --path host
+cyd-deck install    # app menu + start at login
 cyd-deck            # background app that drives the deck
 cyd-deck gui        # the editor
 ```
 
-The first time you open the editor a short guide walks you through language, colors and starting pages.
 Your user needs access to the serial port (`uucp` group on Arch, `dialout` on Debian/Ubuntu).
 If touches land on the wrong key, stop `cyd-deck` and run `cyd-deck calibrate` once.
 
-To start it with Hyprland, add `exec-once = ~/.cargo/bin/cyd-deck` to your `hyprland.conf`.
+Hyprland doesn't read the standard autostart folder: add `exec-once = ~/.cargo/bin/cyd-deck`
+(or the path of the AppImage followed by `run`) to your `hyprland.conf`.
 I prefer that to a systemd service: apps launched from the deck inherit the Hyprland environment and
 don't die when the background app restarts.
 
@@ -207,6 +221,8 @@ This project stands on a lot of other people's work, given away for free. Thank 
 **Fonts and icons**
 - [Material Symbols](https://fonts.google.com/icons) by Google (Apache 2.0)
 - [Rubik](https://fonts.google.com/specimen/Rubik) by Hubert & Fischer (SIL Open Font License)
+- both are bundled in the app, with their licenses in `host/fonts/`
+- [AppImage](https://appimage.org) and `appimagetool` for the single-file Linux build
 
 **Desktop and integrations**
 - [Caelestia](https://github.com/caelestia-dots/shell) by the caelestia-dots team: the colors, the player and a lot of the inspiration

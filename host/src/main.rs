@@ -10,6 +10,7 @@ mod config;
 mod device;
 mod gui;
 mod icons;
+mod install;
 mod macros;
 mod media;
 mod mixer;
@@ -33,6 +34,8 @@ uso:
   cyd-deck ports      elenca le porte seriali
   cyd-deck preview [dir]  salva le pagine come immagini PPM
   cyd-deck config     stampa il percorso della config
+  cyd-deck install    aggiunge l'editor al menu delle app e il programma all'avvio
+  cyd-deck uninstall  toglie quello che ha aggiunto install
   cyd-deck ha ...     comandi per Home Assistant (cyd-deck ha per l'aiuto)
   cyd-deck printer ...  stampante Bambu Lab (cyd-deck printer per l'aiuto)
   cyd-deck cached <min> <cmd>  ultimo risultato del comando, rinnovato ogni <min> minuti
@@ -81,6 +84,8 @@ fn main() -> ExitCode {
             let dir = std::env::args().nth(2).unwrap_or_else(|| "cyd-deck-preview".into());
             app::preview(&cfg_path, std::path::Path::new(&dir))
         }
+        Some("install") => install::cli_install(),
+        Some("uninstall") => install::cli_uninstall(),
         Some("config") => {
             println!("{}", cfg_path.display());
             Ok(())

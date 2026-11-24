@@ -2131,7 +2131,33 @@ impl Editor {
                     if daemon {
                         ui.label(RichText::new(tr!("Il programma in background è attivo")).color(ok));
                     } else {
-                        ui.label(RichText::new(tr!("Il programma in background non è attivo: avvialo con `cyd-deck` (o all'avvio del desktop).")).color(muted));
+                        ui.label(RichText::new(tr!("Il programma in background non è attivo: è lui che comanda il deck.")).color(muted));
+                        ui.horizontal(|ui| {
+                            if ui.button(tr!("Avvia ora")).clicked() {
+                                match crate::install::start_daemon() {
+                                    Ok(()) => {
+                                        // Il tempo di partire, poi si ricontrolla.
+                                        std::thread::sleep(std::time::Duration::from_millis(300));
+                                        self.intro_check = None;
+                                    }
+                                    Err(e) => self.set_status(format!("{e:#}"), true),
+                                }
+                            }
+                        });
+                    }
+                    ui.add_space(4.0);
+                    let mut autostart = crate::install::autostart_enabled();
+                    if ui.checkbox(&mut autostart, tr!("Avvia sempre all'accesso (e metti CYD Deck nel menu delle app)")).changed() && autostart {
+                        if let Err(e) = crate::install::add_to_menu().and_then(|()| crate::install::add_autostart()) {
+                            self.set_status(format!("{e:#}"), true);
+                        }
+                    }
+                    if autostart && std::env::var_os("HYPRLAND_INSTANCE_SIGNATURE").is_some() {
+                        ui.label(
+                            RichText::new(tr!("Su Hyprland aggiungi anche a hyprland.conf: exec-once = {} run", crate::install::exe().display()))
+                                .color(muted)
+                                .small(),
+                        );
                     }
                     ui.add_space(6.0);
                     if ui.button(tr!("Controlla di nuovo")).clicked() {

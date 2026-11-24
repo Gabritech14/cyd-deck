@@ -16,7 +16,7 @@ Un macropad touch open source stile Stream Deck per la scheda Freenove ESP32-S3 
 
 <p align="center">🇬🇧 <a href="README.md">Read it in English</a></p>
 
-**Per partire in fretta:** [flasha la scheda dal browser](https://gabritech14.github.io/cyd-deck/) → [installa il programma per il PC](#per-partire) → apri l'editor e segui la breve guida.
+**Per partire in fretta:** [flasha la scheda dal browser](https://gabritech14.github.io/cyd-deck/) → [scarica il programma per il PC (AppImage)](https://github.com/Gabritech14/cyd-deck/releases/latest) → apri l'editor e segui la breve guida.
 
 Volevo uno Stream Deck ma non volevo pagarlo, così me lo sono costruito con una scheda ESP32 da una ventina
 di euro con uno schermo touch da 2,8". Alla fine è diventato qualcosa di più di una griglia di tasti: pagine
@@ -41,9 +41,8 @@ mi aiuta a capire da dove partire.
 - scheda Freenove FNK0104 e un cavo USB-C che porti anche i dati
 - facoltativa: una LiPo 1S con il connettore della scheda (leggi prima [Sicurezza](#sicurezza))
 - il case stampato in 3D (link MakerWorld in arrivo)
-- sul PC: Rust, i font **Material Symbols Rounded** e **Rubik**, `fc-match`.
-  `wpctl` (PipeWire) e `playerctl` per l'audio, Hyprland per le pagine che seguono l'app in primo piano.
-  Caelestia è un extra comodo, non è obbligatorio.
+- sul PC: Linux (x86_64). `wpctl` (PipeWire) e `playerctl` per l'audio, Hyprland per le pagine che
+  seguono l'app in primo piano. Caelestia è un extra comodo, non è obbligatorio.
 
 ## Per partire
 
@@ -62,20 +61,35 @@ cd firmware && cargo run --release && cd ..
 
 Se il flash non parte: tieni premuto BOOT, premi RESET, lascia BOOT.
 
-**2. Installa il programma per il PC** (dalla cartella scaricata):
+**2. Scarica il programma per il PC.** Prendi `CYD_Deck-…-x86_64.AppImage` dall'[ultima versione](https://github.com/Gabritech14/cyd-deck/releases/latest),
+rendilo eseguibile e aprilo:
+
+```sh
+chmod +x CYD_Deck-*-x86_64.AppImage
+./CYD_Deck-*-x86_64.AppImage            # l'editor
+./CYD_Deck-*-x86_64.AppImage install    # lo mette nel menu delle app e lo avvia all'accesso
+```
+
+La prima volta che apri l'editor una breve guida ti fa scegliere lingua, colori e pagine di partenza, e può
+avviare per te il programma in background (quello che comanda davvero il deck). Per il resto vale tutto
+quello che segue: dove c'è scritto `cyd-deck` usa l'AppImage (`./CYD_Deck…AppImage calibrate` e così via).
+I font sono già dentro, non serve installare altro.
+
+Oppure compilalo tu (serve [Rust](https://rustup.rs)), dalla cartella scaricata:
 
 ```sh
 git clone https://github.com/Gabritech14/cyd-deck.git && cd cyd-deck   # se non l'hai già fatto
 cargo install --path host
+cyd-deck install    # menu delle app + avvio all'accesso
 cyd-deck            # programma in background che comanda il deck
 cyd-deck gui        # l'editor
 ```
 
-La prima volta che apri l'editor una breve guida ti fa scegliere lingua, colori e pagine di partenza.
 Il tuo utente deve poter usare la porta seriale (gruppo `uucp` su Arch, `dialout` su Debian/Ubuntu).
 Se i tocchi finiscono nel tasto sbagliato, chiudi `cyd-deck` e lancia una volta `cyd-deck calibrate`.
 
-Per avviarlo con Hyprland aggiungi `exec-once = ~/.cargo/bin/cyd-deck` al tuo `hyprland.conf`.
+Hyprland non legge la cartella standard dell'avvio automatico: aggiungi `exec-once = ~/.cargo/bin/cyd-deck`
+(o il percorso dell'AppImage seguito da `run`) al tuo `hyprland.conf`.
 Lo preferisco a un servizio systemd: le app aperte dal deck ereditano l'ambiente di Hyprland e non si
 chiudono se il programma si riavvia.
 
@@ -211,6 +225,8 @@ Questo progetto si regge sul lavoro di tantissime persone, regalato a tutti. Gra
 **Font e icone**
 - [Material Symbols](https://fonts.google.com/icons) di Google (Apache 2.0)
 - [Rubik](https://fonts.google.com/specimen/Rubik) di Hubert & Fischer (SIL Open Font License)
+- tutti e due sono inclusi nel programma, con le loro licenze in `host/fonts/`
+- [AppImage](https://appimage.org) e `appimagetool` per la versione Linux in un solo file
 
 **Desktop e integrazioni**
 - [Caelestia](https://github.com/caelestia-dots/shell) del team caelestia-dots: i colori, il lettore e tanta ispirazione

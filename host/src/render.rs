@@ -119,7 +119,17 @@ pub struct Fonts {
     text: FontRef<'static>,
 }
 
+/// Font inclusi nel programma (licenze in fonts/): funziona senza installare niente.
+const BUNDLED_ICONS: &[u8] = include_bytes!("../fonts/MaterialSymbolsRounded.ttf");
+const BUNDLED_TEXT: &[u8] = include_bytes!("../fonts/Rubik.ttf");
+
 fn find_font(family: &str) -> Result<&'static [u8]> {
+    match family {
+        "" | "Material Symbols Rounded" => return Ok(BUNDLED_ICONS),
+        "Rubik" => return Ok(BUNDLED_TEXT),
+        _ => {}
+    }
+    // Un font scelto nella config: lo si chiede al sistema.
     let out = Command::new("fc-match").args(["-f", "%{file}", family]).output().context("fc-match")?;
     let path = String::from_utf8_lossy(&out.stdout).to_string();
     if path.is_empty() {

@@ -1,6 +1,6 @@
 [package]
 name = "cyd-deck"
-version = "0.3.0"
+version = "0.3.1"
 edition = "2024"
 description = "Desktop app for CYD Deck: turns a Freenove ESP32-S3 2.8\" touch display into a macropad"
 license = "MIT"
