@@ -21,12 +21,17 @@ fn home() -> PathBuf {
     PathBuf::from(std::env::var_os("HOME").unwrap_or_default())
 }
 
+/// Una cartella XDG: vuota o relativa vale come non impostata (lo dice la specifica).
+fn xdg(var: &str, default: &str) -> PathBuf {
+    std::env::var_os(var).map(PathBuf::from).filter(|p| p.is_absolute()).unwrap_or_else(|| home().join(default))
+}
+
 fn data_dir() -> PathBuf {
-    std::env::var_os("XDG_DATA_HOME").map(PathBuf::from).unwrap_or_else(|| home().join(".local/share"))
+    xdg("XDG_DATA_HOME", ".local/share")
 }
 
 fn config_dir() -> PathBuf {
-    std::env::var_os("XDG_CONFIG_HOME").map(PathBuf::from).unwrap_or_else(|| home().join(".config"))
+    xdg("XDG_CONFIG_HOME", ".config")
 }
 
 fn menu_entry() -> PathBuf {
@@ -128,4 +133,21 @@ pub fn cli_uninstall() -> Result<()> {
     }
     println!("{}", tr!("La config resta in ~/.config/cyd-deck: cancellala a mano se non ti serve più."));
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn empty_xdg_is_ignored() {
+        // SAFETY: solo questo test usa queste variabili.
+        unsafe {
+            std::env::set_var("XDG_DATA_HOME", "");
+            std::env::set_var("XDG_CONFIG_HOME", "relativa");
+        }
+        assert!(menu_entry().is_absolute());
+        assert!(autostart_entry().is_absolute());
+        assert!(autostart_entry().starts_with(home().join(".config")));
+    }
 }
