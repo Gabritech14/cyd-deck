@@ -17,12 +17,19 @@ pub struct Preset {
     pub label_cmd: Option<&'static str>,
     /// Spiegazione mostrata nello store.
     pub desc: &'static str,
+    /// Azione interna del deck al posto di un comando.
+    pub action: Option<&'static str>,
 }
 
-const P: Preset = Preset { name: "", icon: "", label: "", exec: "", state: None, icon_active: None, label_cmd: None, desc: "" };
+const P: Preset = Preset { name: "", icon: "", label: "", exec: "", state: None, icon_active: None, label_cmd: None, desc: "", action: None };
 
 const fn p(name: &'static str, icon: &'static str, label: &'static str, exec: &'static str) -> Preset {
     Preset { name, icon, label, exec, ..P }
+}
+
+/// Preset che esegue un'azione interna del deck.
+const fn a(name: &'static str, icon: &'static str, label: &'static str, action: &'static str, desc: &'static str) -> Preset {
+    Preset { name, icon, label, action: Some(action), desc, ..P }
 }
 
 impl Preset {
@@ -32,7 +39,7 @@ impl Preset {
             icon_active: self.icon_active.map(Into::into),
             label: Some(crate::i18n::t(self.label).into()),
             exec: (!self.exec.is_empty()).then(|| self.exec.into()),
-            action: None,
+            action: self.action.map(Into::into),
             state: self.state.map(Into::into),
             label_cmd: self.label_cmd.map(Into::into),
             ..Key::default()
@@ -403,11 +410,14 @@ pub const GROUPS: &[Group] = &[
             p("Claude Code", "smart_toy", "Claude", "foot -e claude"),
             p("Monitor risorse", "monitor_heart", "btop", "foot -e btop"),
             p("Sospendi", "bedtime", "Sospendi", "systemctl suspend"),
-            p("Riavvia", "restart_alt", "Riavvia", "systemctl reboot"),
-            p("Spegni", "power_settings_new", "Spegni", "systemctl poweroff"),
+            p("Riavvia il PC", "restart_alt", "Riavvia", "systemctl reboot"),
+            p("Spegni il PC", "power_settings_new", "Spegni", "systemctl poweroff"),
             p("Esci dalla sessione", "logout", "Esci", r#"loginctl terminate-session "$XDG_SESSION_ID""#),
             p("Apri URL", "public", "Web", "xdg-open https://"),
             p("Batteria del deck", "{battery}", "{battery}", ""),
+            a("Spegni il deck", "power_settings_new", "Spegni deck", "board-off", "Mette la scheda a riposo: si riaccende toccando lo schermo o con BOOT"),
+            a("Riavvia il deck", "restart_alt", "Riavvia deck", "board-restart", "Riavvia la scheda, che poi si ricollega da sola"),
+            a("Spegni lo schermo del deck", "dark_mode", "Off schermo", "backlight-off", "Spegne solo lo schermo: il primo tocco lo riaccende"),
         ],
     },
 ];
@@ -431,6 +441,8 @@ pub struct Plugin {
     pub state: Option<String>,
     pub icon_active: Option<String>,
     pub label_cmd: Option<String>,
+    /// Azione interna del deck (board-off, next-page, ...) al posto del comando.
+    pub action: Option<String>,
     /// Viene da un file in plugins/.
     #[serde(skip)]
     pub user: bool,
@@ -445,6 +457,7 @@ impl Plugin {
             exec: (!self.exec.is_empty()).then(|| self.exec.clone()),
             state: self.state.clone(),
             label_cmd: self.label_cmd.clone(),
+            action: self.action.clone(),
             ..Key::default()
         }
     }
@@ -469,6 +482,7 @@ impl From<(&Group, &Preset)> for Plugin {
             icon_active: p.icon_active.map(Into::into),
             label_cmd: p.label_cmd.map(Into::into),
             description: t(p.desc).into(),
+            action: p.action.map(Into::into),
             ..Plugin::default()
         }
     }
@@ -640,6 +654,9 @@ mod tests {
         let ciao = all.iter().find(|p| p.name == "Ciao").unwrap();
         assert_eq!(ciao.category, USER_CATEGORY);
         assert_eq!(ciao.to_key().label.as_deref(), Some("Ciao"));
+        // Le azioni interne arrivano fino al tasto passando dallo store.
+        let off = catalog(Path::new("/nonexistent")).0.into_iter().find(|p| p.action.as_deref() == Some("board-off")).expect("preset Spegni il deck");
+        assert_eq!(off.to_key().action.as_deref(), Some("board-off"));
         assert!(all.iter().any(|p| p.category == "Hyprland" && !p.user));
     }
 }

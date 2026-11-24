@@ -8,6 +8,8 @@
 //!   A5 05 on:u8                                           inversione colori
 //!   A5 06 len:u16 <ssid\0password\0token\0id>          salva il Wi-Fi (solo via USB; len 0 = spento)
 //!   A5 07                                                 stato della rete (risposta "NET ...")
+//!   A5 08 what:u8                                         1 = riavvia la scheda, 2 = spegnila (sonno profondo)
+//!   A5 09 english:u8                                      lingua dei testi della scheda (la ricorda)
 //! Scheda -> host (testo, una riga per evento):
 //!   HELLO cyd-deck <versione>   seguito da   B <millivolt batteria>
 //!   D x y | M x y | U x y                                 tocco giù / movimento / su
@@ -22,6 +24,8 @@
 use std::io::{BufRead, BufReader, Read, Write};
 use std::net::{IpAddr, SocketAddr, TcpStream, UdpSocket};
 use std::sync::mpsc::{Receiver, RecvTimeoutError, Sender};
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};
 
@@ -81,10 +85,16 @@ pub struct Device {
     pub link: Link,
     /// Per chiudere davvero la connessione: il thread di lettura ne tiene una copia.
     tcp: Option<TcpStream>,
+    /// Ultima volta che la scheda ha mandato qualcosa (la aggiorna il thread di lettura).
+    last_rx: Arc<Mutex<Instant>>,
+    /// Ferma il thread di lettura quando la sessione finisce: con l'USB la sua copia della porta
+    /// resterebbe aperta (e bloccata) se la scheda si riavvia senza staccarsi.
+    stop: Arc<AtomicBool>,
 }
 
 impl Drop for Device {
     fn drop(&mut self) {
+        self.stop.store(true, Ordering::Relaxed);
         if let Some(s) = &self.tcp {
             let _ = s.shutdown(std::net::Shutdown::Both);
         }
@@ -167,8 +177,11 @@ impl Device {
             .with_context(|| format!("apertura {path}"))?;
         let mut reader = port.try_clone()?;
         reader.set_timeout(Duration::from_millis(200))?;
-        thread::spawn(move || read_loop(reader, tx, true));
-        Ok(Self { port, link: Link::Usb, tcp: None })
+        let last_rx = Arc::new(Mutex::new(Instant::now()));
+        let stop = Arc::new(AtomicBool::new(false));
+        let (seen, stopped) = (last_rx.clone(), stop.clone());
+        thread::spawn(move || read_loop(reader, tx, true, seen, stopped));
+        Ok(Self { port, link: Link::Usb, tcp: None, last_rx, stop })
     }
 
     /// Si collega alla scheda via Wi-Fi e si autentica con il codice condiviso.
@@ -197,8 +210,17 @@ impl Device {
         stream.set_read_timeout(Some(Duration::from_millis(200)))?;
         let _ = std::fs::create_dir_all(last_ip_path().parent().unwrap());
         let _ = std::fs::write(last_ip_path(), addr.ip().to_string());
-        thread::spawn(move || read_loop(reader, tx, false));
-        Ok(Self { port: Box::new(w), link: Link::Wifi, tcp: Some(stream) })
+        let last_rx = Arc::new(Mutex::new(Instant::now()));
+        let stop = Arc::new(AtomicBool::new(false));
+        let (seen, stopped) = (last_rx.clone(), stop.clone());
+        thread::spawn(move || read_loop(reader, tx, false, seen, stopped));
+        Ok(Self { port: Box::new(w), link: Link::Wifi, tcp: Some(stream), last_rx, stop })
+    }
+
+    /// Da quanto la scheda non manda niente. Risponde a ogni ping, quindi un silenzio lungo
+    /// vuol dire che non c'è più (riavviata, spenta, fuori portata), anche se il TCP non lo sa ancora.
+    pub fn silent_for(&self) -> Duration {
+        self.last_rx.lock().map_or(Duration::ZERO, |t| t.elapsed())
     }
 
     fn send(&mut self, bytes: &[u8]) -> Result<()> {
@@ -225,6 +247,16 @@ impl Device {
 
     pub fn backlight(&mut self, on: bool) -> Result<()> {
         self.send(&[MAGIC, 0x02, on as u8])
+    }
+
+    /// Riavvia la scheda (`off = false`) o la spegne: si riaccende con un tocco o con BOOT.
+    pub fn power(&mut self, off: bool) -> Result<()> {
+        self.send(&[MAGIC, 0x08, if off { 2 } else { 1 }])
+    }
+
+    /// Lingua dei testi che la scheda mostra da sola (attesa, spegnimento).
+    pub fn language(&mut self, english: bool) -> Result<()> {
+        self.send(&[MAGIC, 0x09, english as u8])
     }
 
     pub fn madctl(&mut self, v: u8) -> Result<()> {
@@ -286,10 +318,11 @@ pub fn screen_size(rotation: u8) -> (u32, u32) {
     if rotation % 2 == 1 { (320, 240) } else { (240, 320) }
 }
 
-fn read_loop(mut port: impl Read, tx: Sender<Event>, is_serial: bool) {
+fn read_loop(mut port: impl Read, tx: Sender<Event>, is_serial: bool, seen: Arc<Mutex<Instant>>, stop: Arc<AtomicBool>) {
     let mut buf = [0u8; 256];
     let mut line = Vec::new();
-    loop {
+    // Le letture hanno un timeout breve, quindi il controllo arriva entro pochi decimi di secondo.
+    while !stop.load(Ordering::Relaxed) {
         match port.read(&mut buf) {
             // Con la seriale 0 byte è solo un timeout; con il TCP vuol dire connessione chiusa.
             Ok(0) => {
@@ -299,6 +332,9 @@ fn read_loop(mut port: impl Read, tx: Sender<Event>, is_serial: bool) {
                 }
             }
             Ok(n) => {
+                if let Ok(mut t) = seen.lock() {
+                    *t = Instant::now();
+                }
                 for &b in &buf[..n] {
                     if b == b'\n' {
                         if let Some(ev) = parse_line(&String::from_utf8_lossy(&line)) {

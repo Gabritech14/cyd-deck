@@ -1,6 +1,6 @@
 [package]
 name = "cyd-deck-fw"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 description = "CYD Deck firmware for the Freenove ESP32-S3 Display 2.8\" (FNK0104)"
 license = "MIT"

@@ -626,7 +626,6 @@ in attesa della scheda (USB o Wi-Fi)...	waiting for the board (USB or Wi-Fi)...
 in attesa della scheda...	waiting for the board...
 attenzione: icona '{}' (pagina '{}') non trovata nel font	warning: icon '{}' (page '{}') not found in the font
 wifi: manca il codice di abbinamento, apri l'editor (Impostazioni → Wi-Fi) per generarlo	wifi: pairing code missing, open the editor (Settings → Wi-Fi) to generate it
-wifi: portachiavi bloccato, la rete sulla scheda resta com'è	wifi: keyring locked, the network on the board stays as it is
 wifi della scheda: connesso, {}	board wifi: connected, {}
 wifi: rete '{}' salvata sulla scheda, che si riavvia	wifi: network '{}' saved on the board, which is restarting
 wifi: disattivato sulla scheda, che si riavvia	wifi: turned off on the board, which is restarting
@@ -681,3 +680,17 @@ Quando una di queste app va in primo piano il deck passa a questa pagina, e torn
 Lo swipe sul deck la salta: compare quando apri una delle app qui sopra (o con un tasto "Vai a una pagina") e sparisce quando la lasci.	Swiping on the deck skips it: it shows up when you open one of the apps above (or with a "Go to a page" key) and disappears when you leave it.
 Token e password del Wi-Fi stanno nel portachiavi di login, aperto quando entri. Con un portachiavi dedicato, che ha una password sua, restano chiusi finché non lo sblocchi: la finestra compare al primo uso.	Tokens and the Wi-Fi password are kept in the login keyring, unlocked when you log in. With a dedicated keyring that has its own password they stay locked until you unlock it: the prompt appears on first use.
 cyd-deck - macropad stile Stream Deck per Freenove ESP32-S3 2.8"\n\nuso:\n  cyd-deck [run]      avvia il demone (default)\n  cyd-deck gui        apre l'editor grafico dei tasti\n  cyd-deck calibrate  calibra l'orientamento del touch\n  cyd-deck ports      elenca le porte seriali\n  cyd-deck preview [dir]  salva le pagine come immagini PPM\n  cyd-deck config     stampa il percorso della config\n  cyd-deck ha ...     comandi per Home Assistant (cyd-deck ha per l'aiuto)\n  cyd-deck printer ...  stampante Bambu Lab (cyd-deck printer per l'aiuto)\n  cyd-deck cached <min> <cmd>  ultimo risultato del comando, rinnovato ogni <min> minuti\n  cyd-deck statusline status line per Claude Code: salva i limiti d'uso per il deck	cyd-deck - Stream Deck-style macropad for the Freenove ESP32-S3 2.8"\n\nusage:\n  cyd-deck [run]      start the background app (default)\n  cyd-deck gui        open the key editor\n  cyd-deck calibrate  calibrate the touch orientation\n  cyd-deck ports      list serial ports\n  cyd-deck preview [dir]  save the pages as PPM images\n  cyd-deck config     print the config path\n  cyd-deck ha ...     Home Assistant commands (cyd-deck ha for help)\n  cyd-deck printer ...  Bambu Lab printer (cyd-deck printer for help)\n  cyd-deck cached <min> <cmd>  last output of the command, refreshed every <min> minutes\n  cyd-deck statusline status line for Claude Code: saves usage limits for the deck
+Riavvia la scheda	Restart the board
+Spegni la scheda	Turn the board off
+Spegni deck	Deck off
+la scheda non risponde più	the board stopped responding
+wifi: la scheda va aggiornata ma il portachiavi cyd-deck è chiuso: sbloccalo (editor → Impostazioni) e ricollegala via USB	wifi: the board needs updating but the cyd-deck keyring is locked: unlock it (editor → Settings) and plug the board in over USB again
+Riavvia il PC	Restart the PC
+Spegni il PC	Shut down the PC
+Spegni il deck	Turn the deck off
+Riavvia il deck	Restart the deck
+Riavvia deck	Restart deck
+Spegni lo schermo del deck	Turn the deck screen off
+Mette la scheda a riposo: si riaccende toccando lo schermo o con BOOT	Puts the board to sleep: touch the screen or press BOOT to wake it
+Riavvia la scheda, che poi si ricollega da sola	Restarts the board, which then reconnects by itself
+Spegne solo lo schermo: il primo tocco lo riaccende	Only turns the screen off: the first touch turns it back on

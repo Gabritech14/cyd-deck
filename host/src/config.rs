@@ -305,7 +305,7 @@ pub struct Key {
     /// Comando shell da eseguire alla pressione.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exec: Option<String>,
-    /// Azione interna: next-page, prev-page, page:<nome>, backlight-off, reload.
+    /// Azione interna: next-page, prev-page, page:<nome>, backlight-off, board-restart, board-off, reload.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
     /// Comando shell: exit code 0 = tasto attivo (evidenziato).
@@ -547,7 +547,7 @@ const SAVED_HEADER: &str = "\
 # CYD Deck - config (written by the editor / scritta dall'editor: `cyd-deck gui`)
 # Reloaded automatically on save / ricaricata a ogni salvataggio.
 # Key fields / campi di un tasto: icon, icon_active, label, exec, action, state, label_cmd.
-# action: next-page | prev-page | page:<name> | backlight-off | reload
+# action: next-page | prev-page | page:<name> | backlight-off | board-restart | board-off | reload
 
 ";
 /// Salva la config; al primo salvataggio tiene una copia dell'originale in config.toml.bak.
@@ -665,7 +665,9 @@ mod tests {
 
     #[test]
     fn save_roundtrip() {
-        let cfg: Config = toml::from_str(DEFAULT_CONFIG).unwrap();
+        let mut cfg: Config = toml::from_str(DEFAULT_CONFIG).unwrap();
+        // Un buco in mezzo alla griglia.
+        cfg.pages[2].keys[9] = Key::default();
         let dir = std::env::temp_dir().join(format!("cyd-deck-test-{}", std::process::id()));
         std::fs::create_dir_all(&dir).unwrap();
         let path = dir.join("config.toml");
@@ -675,6 +677,7 @@ mod tests {
         // I tasti vuoti in mezzo alla griglia devono restare al loro posto.
         assert_eq!(back, cfg);
         assert!(back.pages[2].keys[9] == Key::default());
+        assert_eq!(back.pages[2].keys[10].action.as_deref(), Some("backlight-off"));
     }
 
     #[test]

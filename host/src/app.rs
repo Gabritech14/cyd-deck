@@ -428,6 +428,11 @@ fn active_class() -> Option<String> {
     v["class"].as_str().map(str::to_string)
 }
 
+/// Ogni quanto si manda un ping alla scheda.
+const PING_EVERY: Duration = Duration::from_secs(4);
+/// Dopo quanto silenzio la scheda è considerata sparita.
+const BOARD_SILENT: Duration = Duration::from_secs(10);
+
 pub fn run(cfg_path: &Path) -> Result<()> {
     let (tx, rx) = mpsc::channel();
     let mut app = App::new(cfg_path, tx.clone())?;
@@ -512,10 +517,6 @@ impl App {
             eprintln!("{}", tr!("wifi: manca il codice di abbinamento, apri l'editor (Impostazioni → Wi-Fi) per generarlo"));
             return Ok(false);
         }
-        if wifi.locked {
-            eprintln!("{}", tr!("wifi: portachiavi bloccato, la rete sulla scheda resta com'è"));
-            return Ok(false);
-        }
         dev.query_net()?;
         let deadline = Instant::now() + Duration::from_millis(800);
         let mut board_id = None;
@@ -536,6 +537,24 @@ impl App {
         }
         // Un firmware vecchio, senza Wi-Fi, non risponde: si lascia stare.
         let Some(board_id) = board_id else { return Ok(false) };
+        if board_id == wifi.id() {
+            return Ok(false);
+        }
+        // La scheda va aggiornata (per esempio dopo un flash che l'ha cancellata), ma con il
+        // portachiavi chiuso la password non si conosce: solo ora si chiede di sbloccarlo.
+        if wifi.locked {
+            match crate::secrets::get(crate::secrets::WIFI_PASSWORD, crate::secrets::Prompt::Auto) {
+                Ok(p) => {
+                    self.cfg.wifi.password = p.unwrap_or_default();
+                    self.cfg.wifi.locked = false;
+                }
+                Err(_) => {
+                    eprintln!("{}", tr!("wifi: la scheda va aggiornata ma il portachiavi cyd-deck è chiuso: sbloccalo (editor → Impostazioni) e ricollegala via USB"));
+                    return Ok(false);
+                }
+            }
+        }
+        let wifi = &self.cfg.wifi;
         if board_id == wifi.id() {
             return Ok(false);
         }
@@ -571,6 +590,7 @@ impl App {
         let d = &self.cfg.device;
         dev.madctl(device::madctl(d.rotation, d.bgr))?;
         dev.invert(d.invert)?;
+        dev.language(crate::i18n::english())?;
         dev.backlight(true)?;
         self.backlight = true;
         self.last_activity = Instant::now();
@@ -644,6 +664,7 @@ impl App {
                 let d = &self.cfg.device;
                 dev.madctl(device::madctl(d.rotation, d.bgr))?;
                 dev.invert(d.invert)?;
+                dev.language(crate::i18n::english())?;
             }
             if cfg_changed || scheme_changed {
                 self.full_redraw(dev)?;
@@ -681,8 +702,13 @@ impl App {
         }
         // Il ping tiene viva la connessione e porta con sé il livello della batteria.
         if now >= self.next_ping {
-            self.next_ping = now + Duration::from_secs(10);
+            self.next_ping = now + PING_EVERY;
             dev.ping()?;
+        }
+        // Nessuna risposta a due ping di fila: la scheda non c'è più, la si cerca di nuovo subito
+        // invece di aspettare che il TCP se ne accorga (anche molti minuti).
+        if dev.silent_for() > BOARD_SILENT {
+            bail!("{}", tr!("la scheda non risponde più"));
         }
         if self.backlight && now >= self.mixer.next_poll && self.poll_cfg().is_some() {
             self.mixer.next_poll = now + Duration::from_secs(1);
@@ -1008,6 +1034,9 @@ impl App {
                 dev.backlight(false)?;
                 self.backlight = false;
             }
+            // Dopo questi la scheda si scollega da sola; il programma la aspetta come sempre.
+            "board-restart" => dev.power(false)?,
+            "board-off" => dev.power(true)?,
             "reload" => {
                 self.cfg_mtime = None;
                 self.scheme_mtime = None;

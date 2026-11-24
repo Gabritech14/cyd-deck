@@ -189,7 +189,7 @@ dependencies = [
 
 [[package]]
 name = "cyd-deck-fw"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "embassy-executor",
  "embassy-futures",

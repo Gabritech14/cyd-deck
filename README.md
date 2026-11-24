@@ -86,6 +86,7 @@ hundred ready-made actions (media, Hyprland, system stuff, every app installed o
 
 The interface is in English or Italian and follows your system language; you can change it in Settings,
 together with the colors (a handful of ready-made themes, any accent color you like, light or dark).
+The board follows the same language for the few things it shows by itself (waiting screen, turning off).
 
 A few things worth knowing:
 
@@ -99,7 +100,10 @@ A few things worth knowing:
 - **Claude Code limits**: if you use Claude Code, a page can show your 5-hour and weekly usage
   (add `"statusLine": { "type": "command", "command": "~/.cargo/bin/cyd-deck statusline" }` to `~/.claude/settings.json`).
 - **Home Assistant** and **Bambu Lab printers** (LAN mode) show up in the Store once configured in Settings.
-- **Plugins**: drop `.toml` files in `~/.config/cyd-deck/plugins/` to add your own actions to the Store.
+- **Deck power keys**: Store → System has "Turn the deck off" and "Restart the deck". Off is a deep sleep
+  (it can't cut the battery by itself): touch the screen or press BOOT and it wakes up and reconnects.
+- **Plugins**: drop `.toml` files in `~/.config/cyd-deck/plugins/` to add your own actions to the Store
+  (a command with `exec`, or one of the deck's own actions with `action`).
 
 Everything lives in `~/.config/cyd-deck/config.toml`, which reloads on save if you'd rather edit it by hand:
 
@@ -118,7 +122,9 @@ state = "wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q MUTED"   # exit 0 = hig
 ## Wi-Fi and battery
 
 Set the network in Settings → Board Wi-Fi, plug the board in once over USB so it gets the settings, then
-unplug it. The app uses USB when it's there and finds the board on the network otherwise.
+unplug it. The app uses USB when it's there and finds the board on the network otherwise. If the board
+restarts or drops off the network, the app notices within about ten seconds and reconnects.
+After reflashing with "erase" the board forgets the network: plug it in over USB once more.
 
 Only 2.4 GHz networks work. If it feels laggy, look at the dBm on the waiting screen: below about -65 it's
 going to struggle. Mine sat behind a repeater at -70 and it was unusable, so now my laptop makes a small

@@ -31,7 +31,7 @@ text_font = "Rubik"
 #   icon_active icona mostrata quando `state` è vero
 #   label       etichetta sotto l'icona
 #   exec        comando shell eseguito alla pressione
-#   action      next-page | prev-page | page:<nome> | backlight-off | reload
+#   action      next-page | prev-page | page:<nome> | backlight-off | board-restart | board-off | reload
 #   state       comando shell: exit code 0 = tasto evidenziato
 #   label_cmd   comando shell il cui output diventa l'etichetta
 
@@ -222,6 +222,9 @@ label = "Social"
 exec = "caelestia toggle communication"
 
 [[page.key]]
+icon = "power_settings_new"
+label = "Spegni deck"
+action = "board-off"
 
 [[page.key]]
 icon = "dark_mode"

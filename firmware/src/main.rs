@@ -4,6 +4,8 @@
 //! li manda all'ILI9341, legge il touch FT6336 e restituisce gli eventi.
 //! Il PC si collega via USB oppure via Wi-Fi (TCP, dopo un'autenticazione con
 //! un codice condiviso). Il protocollo è descritto in host/src/device.rs.
+//! Su richiesta del PC la scheda si riavvia o si "spegne" (sonno profondo, si risveglia
+//! con un tocco o con il tasto BOOT) e ricorda la lingua dei testi che mostra da sola.
 
 #![no_std]
 #![no_main]
@@ -39,11 +41,12 @@ use esp_hal::{
     analog::adc::{Adc, AdcCalCurve, AdcConfig, AdcPin, Attenuation},
     clock::CpuClock,
     delay::Delay,
-    gpio::{Level, Output, OutputConfig},
+    gpio::{Event as PinEvent, Input, InputConfig, Level, Output, OutputConfig, Pull, WakeupConfig},
     i2c::master::{Config as I2cConfig, I2c},
     peripherals::{ADC1, GPIO9},
     ram,
     rng::Rng,
+    rtc_cntl::sleep::{LowPower, RtcSleepConfig},
     spi::{
         Mode,
         master::{Config as SpiConfig, Spi},
@@ -82,6 +85,16 @@ const USB_IDLE: Duration = Duration::from_secs(25);
 /// Senza PC collegato lo schermo si spegne dopo questo tempo (il tocco lo riaccende).
 const ALONE_BACKLIGHT: Duration = Duration::from_secs(120);
 const CFG_MAGIC: &[u8; 4] = b"CYD1";
+/// La lingua scelta sul PC sta nel secondo settore della partizione NVS.
+const LANG_OFFSET: u32 = 4096;
+const LANG_MAGIC: &[u8; 4] = b"LNG1";
+
+/// Testi della scheda: inglese finché un PC non sceglie l'italiano.
+static ENGLISH: AtomicBool = AtomicBool::new(true);
+
+fn t(it: &'static str, en: &'static str) -> &'static str {
+    if ENGLISH.load(Ordering::Relaxed) { en } else { it }
+}
 
 // ------------------------------------------------------------------ hardware
 
@@ -266,6 +279,10 @@ static EVENTS: PubSubChannel<CriticalSectionRawMutex, Line, 16, 2, 1> = PubSubCh
 /// Stato della retroilluminazione, per il risparmio energetico del Wi-Fi.
 static BACKLIGHT: Signal<CriticalSectionRawMutex, bool> = Signal::new();
 static BACKLIGHT_ON: AtomicBool = AtomicBool::new(true);
+/// Richieste del PC: 1 = riavvia, 2 = spegni (sonno profondo).
+static POWER: Signal<CriticalSectionRawMutex, u8> = Signal::new();
+/// Lingua scelta sul PC (true = inglese).
+static LANG: Signal<CriticalSectionRawMutex, bool> = Signal::new();
 /// Chiede di ridisegnare la schermata di attesa.
 static STATUS_DIRTY: Signal<CriticalSectionRawMutex, ()> = Signal::new();
 /// 0 = Wi-Fi non configurato, 1 = connessione in corso, 2 = connesso.
@@ -333,6 +350,19 @@ fn with_nvs<R>(flash: &mut FlashStorage<'static>, f: impl FnOnce(&mut partitions
     Some(f(&mut region))
 }
 
+fn load_lang(flash: &mut FlashStorage<'static>) -> Option<bool> {
+    let mut buf = [0u8; 5];
+    with_nvs(flash, |r| r.read(LANG_OFFSET, &mut buf).ok())??;
+    (&buf[..4] == LANG_MAGIC).then_some(buf[4] != 0)
+}
+
+fn save_lang(flash: &mut FlashStorage<'static>, english: bool) -> bool {
+    let mut buf = [0u8; 5];
+    buf[..4].copy_from_slice(LANG_MAGIC);
+    buf[4] = english as u8;
+    with_nvs(flash, |r| r.write(LANG_OFFSET, &buf).is_ok()).unwrap_or(false)
+}
+
 fn load_cfg(flash: &mut FlashStorage<'static>) -> Option<WifiCfg> {
     let mut buf = [0u8; 6 + 256];
     with_nvs(flash, |r| r.read(0, &mut buf).ok())??;
@@ -368,6 +398,7 @@ fn arg_len(cmd: u8) -> Option<usize> {
     match cmd {
         0x01 => Some(8),               // blit: x y w h
         0x02 | 0x04 | 0x05 => Some(1), // retroilluminazione, MADCTL, inversione
+        0x08 | 0x09 => Some(1),        // riavvio/spegnimento, lingua
         0x03 | 0x07 => Some(0),        // ping, stato della rete
         0x06 => Some(2),               // configurazione Wi-Fi: lunghezza, poi i dati
         _ => None,
@@ -447,6 +478,14 @@ impl Parser {
                             }
                             0x02 => {
                                 hw.set_backlight(buf[0] != 0);
+                                State::Idle
+                            }
+                            0x08 => {
+                                POWER.signal(buf[0]);
+                                State::Idle
+                            }
+                            0x09 => {
+                                LANG.signal(buf[0] != 0);
                                 State::Idle
                             }
                             0x04 => {
@@ -651,15 +690,15 @@ async fn status_task(hw: &'static RefCell<Hw>, cfg: Option<&'static WifiCfg>) {
         let ip = NET_IP.load(Ordering::Relaxed).to_be_bytes();
         match (cfg, NET_STATE.load(Ordering::Relaxed)) {
             (None, _) => {
-                let _ = write!(l1, "In attesa del PC");
-                let _ = write!(l2, "Collegala via USB");
+                let _ = write!(l1, "{}", t("In attesa del PC", "Waiting for the PC"));
+                let _ = write!(l2, "{}", t("Collegala via USB", "Plug it in over USB"));
             }
             (Some(c), 2) => {
                 let _ = write!(l1, "{}.{}.{}.{}", ip[0], ip[1], ip[2], ip[3]);
-                let _ = write!(l2, "Wi-Fi {} - in attesa del PC", c.ssid);
+                let _ = write!(l2, "Wi-Fi {} - {}", c.ssid, t("in attesa del PC", "waiting for the PC"));
             }
             (Some(c), _) => {
-                let _ = write!(l1, "Connessione Wi-Fi...");
+                let _ = write!(l1, "{}", t("Connessione Wi-Fi...", "Connecting to Wi-Fi..."));
                 let _ = write!(l2, "{}", c.ssid);
             }
         }
@@ -676,6 +715,91 @@ async fn status_task(hw: &'static RefCell<Hw>, cfg: Option<&'static WifiCfg>) {
             splash(&mut hw.borrow_mut(), &l1, &l2);
             shown = Some((l1, l2));
         }
+    }
+}
+
+/// Pin che servono per spegnere e risvegliare la scheda.
+struct PowerPins {
+    lp: LowPower<'static>,
+    /// INT del touch: basso finché c'è un dito sullo schermo.
+    touch_int: Input<'static>,
+    /// Tasto BOOT, basso quando è premuto.
+    boot: Input<'static>,
+    /// Reset del touch: deve restare alto anche durante il sonno, altrimenti il touch non sveglia.
+    touch_rst: Output<'static>,
+}
+
+/// Riavvio, spegnimento e lingua, chiesti dal PC.
+#[embassy_executor::task]
+async fn system_task(
+    hw: &'static RefCell<Hw>,
+    flash: &'static RefCell<FlashStorage<'static>>,
+    mut saved_lang: Option<bool>,
+    mut pins: PowerPins,
+) {
+    loop {
+        match select(POWER.wait(), LANG.wait()).await {
+            Either::First(1) => {
+                splash(&mut hw.borrow_mut(), t("Riavvio...", "Restarting..."), "");
+                Timer::after_millis(300).await;
+                esp_hal::system::software_reset();
+            }
+            Either::First(2) => power_off(hw, &mut pins).await,
+            Either::First(_) => {}
+            Either::Second(english) => {
+                ENGLISH.store(english, Ordering::Relaxed);
+                // La flash si scrive solo quando la lingua cambia davvero.
+                if saved_lang != Some(english) && save_lang(&mut flash.borrow_mut(), english) {
+                    saved_lang = Some(english);
+                }
+                STATUS_DIRTY.signal(());
+            }
+        }
+    }
+}
+
+/// "Spegne" la scheda: sonno profondo, da cui la svegliano un tocco o il tasto BOOT.
+/// La batteria resta collegata, ma la scheda consuma pochissimo.
+async fn power_off(hw: &'static RefCell<Hw>, pins: &mut PowerPins) {
+    splash(
+        &mut hw.borrow_mut(),
+        t("Spegnimento...", "Turning off..."),
+        t("Tocca lo schermo o premi BOOT per riaccendere", "Touch the screen or press BOOT to turn on"),
+    );
+    Timer::after_millis(1500).await;
+    loop {
+        // Si aspetta che il dito si stacchi: un pin già basso risveglierebbe subito la scheda.
+        let mut free_since = Instant::now();
+        while free_since.elapsed() < Duration::from_millis(500) {
+            if pins.touch_int.is_low() || pins.boot.is_low() {
+                free_since = Instant::now();
+            }
+            Timer::after_millis(20).await;
+        }
+        {
+            let mut hw = hw.borrow_mut();
+            hw.display.cmd(0x28, &[]); // display off
+            hw.display.cmd(0x10, &[]); // sleep in
+            hw.set_backlight(false);
+            hw.backlight.set_pad_hold(true);
+        }
+        pins.touch_rst.set_pad_hold(true);
+        let wake = WakeupConfig::default().with_low_power_path(true);
+        for pin in [&mut pins.touch_int, &mut pins.boot] {
+            pin.listen(PinEvent::LowLevel);
+            let _ = pin.apply_wakeup_config(&wake);
+        }
+        pins.lp.sleep_deep_with_rejection(RtcSleepConfig::deep());
+        // Rifiutato: un tocco è arrivato proprio adesso. Si riaccende e si riprova.
+        for pin in [&mut pins.touch_int, &mut pins.boot] {
+            pin.unlisten();
+        }
+        pins.touch_rst.set_pad_hold(false);
+        let mut hw = hw.borrow_mut();
+        hw.backlight.set_pad_hold(false);
+        hw.display.cmd(0x11, &[]);
+        hw.display.cmd(0x29, &[]);
+        hw.set_backlight(true);
     }
 }
 
@@ -867,7 +991,9 @@ async fn main(spawner: Spawner) -> ! {
     esp_rtos::start(timg0.timer0, p.FROM_CPU_INTR0);
     let delay = Delay::new();
 
-    let backlight = Output::new(p.GPIO45, Level::Low, OutputConfig::default());
+    let mut backlight = Output::new(p.GPIO45, Level::Low, OutputConfig::default());
+    // Dopo uno spegnimento il pin è ancora bloccato: si libera.
+    backlight.set_pad_hold(false);
     let spi = Spi::new(p.SPI2, SpiConfig::default().with_frequency(Rate::from_mhz(40)).with_mode(Mode::_0))
         .unwrap()
         .with_sck(p.GPIO12)
@@ -884,20 +1010,23 @@ async fn main(spawner: Spawner) -> ! {
     hw.borrow_mut().set_backlight(true);
 
     let mut touch_rst = Output::new(p.GPIO18, Level::Low, OutputConfig::default());
+    touch_rst.set_pad_hold(false);
     delay.delay_millis(10);
     touch_rst.set_high();
     delay.delay_millis(300);
-    let i2c = I2c::new(p.I2C0, I2cConfig::default().with_frequency(Rate::from_khz(400)))
+    let mut i2c = I2c::new(p.I2C0, I2cConfig::default().with_frequency(Rate::from_khz(400)))
         .unwrap()
         .with_sda(p.GPIO16)
         .with_scl(p.GPIO15);
-    // Il pin di reset deve restare alto per sempre.
-    core::mem::forget(touch_rst);
+    // INT resta basso per tutto il tocco (e non a impulsi): serve per svegliare la scheda.
+    let _ = i2c.write(TOUCH_ADDR, &[0xA4, 0x00]);
 
     static FLASH: StaticCell<RefCell<FlashStorage<'static>>> = StaticCell::new();
     let flash = &*FLASH.init(RefCell::new(FlashStorage::new(p.FLASH)));
     static CFG: StaticCell<Option<WifiCfg>> = StaticCell::new();
     let cfg: Option<&'static WifiCfg> = CFG.init(load_cfg(&mut flash.borrow_mut())).as_ref();
+    let saved_lang = load_lang(&mut flash.borrow_mut());
+    ENGLISH.store(saved_lang.unwrap_or(true), Ordering::Relaxed);
 
     let mut adc_cfg = AdcConfig::new();
     let bat_pin = adc_cfg.enable_pin_with_cal::<_, AdcCalCurve<ADC1>>(p.GPIO9, Attenuation::_11dB);
@@ -908,6 +1037,13 @@ async fn main(spawner: Spawner) -> ! {
     spawner.spawn(touch_task(Touch { i2c }, hw).unwrap());
     spawner.spawn(battery_task(adc, bat_pin).unwrap());
     spawner.spawn(status_task(hw, cfg).unwrap());
+    let pins = PowerPins {
+        lp: LowPower::new(p.LPWR),
+        touch_int: Input::new(p.GPIO17, InputConfig::default().with_pull(Pull::Up)),
+        boot: Input::new(p.GPIO0, InputConfig::default().with_pull(Pull::Up)),
+        touch_rst,
+    };
+    spawner.spawn(system_task(hw, flash, saved_lang, pins).unwrap());
     STATUS_DIRTY.signal(());
 
     if let Some(cfg) = cfg {

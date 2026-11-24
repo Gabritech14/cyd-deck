@@ -88,6 +88,7 @@ installate).
 
 L'interfaccia è in italiano o in inglese e segue la lingua del sistema; puoi cambiarla in Impostazioni,
 insieme ai colori (qualche tema pronto, un colore a piacere, chiaro o scuro).
+La scheda segue la stessa lingua per le poche scritte che mostra da sola (attesa, spegnimento).
 
 Qualche cosa da sapere:
 
@@ -102,7 +103,11 @@ Qualche cosa da sapere:
 - **Limiti di Claude Code**: se usi Claude Code, una pagina può mostrare l'uso delle 5 ore e della settimana
   (aggiungi `"statusLine": { "type": "command", "command": "~/.cargo/bin/cyd-deck statusline" }` a `~/.claude/settings.json`).
 - **Home Assistant** e **stampanti Bambu Lab** (modalità LAN) compaiono nello Store dopo averli impostati.
-- **Plugin**: file `.toml` in `~/.config/cyd-deck/plugins/` per aggiungere allo Store azioni tue.
+- **Tasti di accensione del deck**: nello Store → Sistema ci sono "Spegni il deck" e "Riavvia il deck".
+  Spento vuol dire sonno profondo (da sola la scheda non può staccare la batteria): tocca lo schermo o premi
+  BOOT e si riaccende e si ricollega.
+- **Plugin**: file `.toml` in `~/.config/cyd-deck/plugins/` per aggiungere allo Store azioni tue
+  (un comando con `exec`, o un'azione del deck con `action`).
 
 Tutto sta in `~/.config/cyd-deck/config.toml`, che si ricarica a ogni salvataggio se preferisci scriverlo a mano:
 
@@ -121,7 +126,9 @@ state = "wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q MUTED"   # exit 0 = evi
 ## Wi-Fi e batteria
 
 Imposta la rete in Impostazioni → Wi-Fi della scheda, collega la scheda una volta via USB perché riceva i
-dati, poi staccala. Il programma usa l'USB quando c'è e altrimenti trova la scheda in rete.
+dati, poi staccala. Il programma usa l'USB quando c'è e altrimenti trova la scheda in rete. Se la scheda si
+riavvia o esce dalla rete, il programma se ne accorge in una decina di secondi e si ricollega.
+Dopo un flash con "cancella" la scheda dimentica la rete: ricollegala via USB una volta.
 
 Vanno solo le reti a 2,4 GHz. Se è lento guarda i dBm sullo schermo di attesa: sotto circa -65 fa fatica.
 Il mio era dietro un ripetitore a -70 ed era inutilizzabile, così adesso il portatile crea una piccola rete

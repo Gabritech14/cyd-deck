@@ -100,11 +100,13 @@ enum ActionKind {
     NextPage,
     PrevPage,
     BacklightOff,
+    BoardRestart,
+    BoardOff,
     Reload,
 }
 
 impl ActionKind {
-    const ALL: [ActionKind; 8] = [
+    const ALL: [ActionKind; 10] = [
         ActionKind::None,
         ActionKind::Command,
         ActionKind::Macro,
@@ -112,6 +114,8 @@ impl ActionKind {
         ActionKind::NextPage,
         ActionKind::PrevPage,
         ActionKind::BacklightOff,
+        ActionKind::BoardRestart,
+        ActionKind::BoardOff,
         ActionKind::Reload,
     ];
 
@@ -123,6 +127,8 @@ impl ActionKind {
             Some("next-page") => Self::NextPage,
             Some("prev-page") => Self::PrevPage,
             Some("backlight-off") => Self::BacklightOff,
+            Some("board-restart") => Self::BoardRestart,
+            Some("board-off") => Self::BoardOff,
             Some("reload") => Self::Reload,
             Some(a) if a.starts_with("page:") => Self::Page,
             _ if k.exec.is_some() => Self::Command,
@@ -139,6 +145,8 @@ impl ActionKind {
             Self::NextPage => tr!("Pagina successiva"),
             Self::PrevPage => tr!("Pagina precedente"),
             Self::BacklightOff => tr!("Spegni lo schermo"),
+            Self::BoardRestart => tr!("Riavvia la scheda"),
+            Self::BoardOff => tr!("Spegni la scheda"),
             Self::Reload => tr!("Ricarica config"),
         }
     }
@@ -1146,6 +1154,8 @@ impl Editor {
                         ActionKind::NextPage => Some("next-page".into()),
                         ActionKind::PrevPage => Some("prev-page".into()),
                         ActionKind::BacklightOff => Some("backlight-off".into()),
+                        ActionKind::BoardRestart => Some("board-restart".into()),
+                        ActionKind::BoardOff => Some("board-off".into()),
                         ActionKind::Reload => Some("reload".into()),
                     };
                 }
@@ -1505,6 +1515,8 @@ impl Editor {
                                 ("next-page".into(), tr!("Pagina successiva").into()),
                                 ("prev-page".into(), tr!("Pagina precedente").into()),
                                 ("backlight-off".into(), tr!("Spegni lo schermo").into()),
+                                ("board-restart".into(), tr!("Riavvia la scheda").into()),
+                                ("board-off".into(), tr!("Spegni la scheda").into()),
                             ];
                             options.extend(self.cfg.pages.iter().map(|p| (format!("page:{}", p.name), tr!("Vai a: {}", p.name))));
                             let current = options.iter().find(|(v, _)| v == action).map(|(_, l)| l.clone()).unwrap_or_else(|| action.clone());
