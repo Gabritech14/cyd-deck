@@ -1,6 +1,22 @@
-# CYD Deck
+<h1 align="center">CYD Deck</h1>
 
-🇮🇹 [Leggilo in italiano](README.it.md)
+<p align="center"><b>Your deck, your rules.</b><br>
+An open source, Stream Deck-style touch macropad for the Freenove ESP32-S3 2.8" board.</p>
+
+<p align="center">
+  <a href="https://gabritech14.github.io/cyd-deck/"><img alt="Flash it from your browser" src="https://img.shields.io/badge/%E2%9A%A1%20Flash%20it%20from%20your%20browser-ffb878?style=for-the-badge&labelColor=4c2700"></a>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-ffb878"></a>
+  <a href="https://github.com/Gabritech14/cyd-deck/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/Gabritech14/cyd-deck?color=ffb878"></a>
+  <img alt="Linux" src="https://img.shields.io/badge/desktop-Linux-ffb878">
+  <img alt="Rust" src="https://img.shields.io/badge/made%20with-Rust-ffb878">
+</p>
+
+<p align="center">🇮🇹 <a href="README.it.md">Leggilo in italiano</a></p>
+
+**Quick start:** [flash the board from your browser](https://gabritech14.github.io/cyd-deck/) → [install the desktop app](#getting-it-running) → open the editor and follow the short guide.
 
 I wanted a Stream Deck but didn't want to pay for one, so I built my own out of a ~€20 ESP32 board with a
 2.8" touch screen. It turned into a bit more than a grid of buttons: pages that switch on their own when you
@@ -30,23 +46,25 @@ for, it helps me decide what to do first.
 
 ## Getting it running
 
-Flash the firmware. The easy way is the **[web flasher](https://gabritech14.github.io/cyd-deck/)**:
+**1. Flash the firmware.** The easy way is the **[web flasher](https://gabritech14.github.io/cyd-deck/)**:
 plug the board in, open the page in Chrome or Edge, click install. Nothing to set up.
 
 If you'd rather build it yourself:
 
 ```sh
+git clone https://github.com/Gabritech14/cyd-deck.git && cd cyd-deck
 cargo install espup espflash
 espup install
 . ~/export-esp.sh
-cd firmware && cargo run --release
+cd firmware && cargo run --release && cd ..
 ```
 
 If flashing doesn't start: hold BOOT, tap RESET, let go of BOOT.
 
-Then the desktop side:
+**2. Install the desktop app** (from the cloned folder):
 
 ```sh
+git clone https://github.com/Gabritech14/cyd-deck.git && cd cyd-deck   # if you haven't already
 cargo install --path host
 cyd-deck            # background app that drives the deck
 cyd-deck gui        # the editor

@@ -1,6 +1,22 @@
-# CYD Deck
+<h1 align="center">CYD Deck</h1>
 
-🇬🇧 [Read it in English](README.md)
+<p align="center"><b>Your deck, your rules.</b><br>
+Un macropad touch open source stile Stream Deck per la scheda Freenove ESP32-S3 2,8".</p>
+
+<p align="center">
+  <a href="https://gabritech14.github.io/cyd-deck/"><img alt="Flasha dal browser" src="https://img.shields.io/badge/%E2%9A%A1%20Flasha%20dal%20browser-ffb878?style=for-the-badge&labelColor=4c2700"></a>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img alt="Licenza MIT" src="https://img.shields.io/badge/licenza-MIT-ffb878"></a>
+  <a href="https://github.com/Gabritech14/cyd-deck/releases/latest"><img alt="Ultima versione" src="https://img.shields.io/github/v/release/Gabritech14/cyd-deck?color=ffb878"></a>
+  <img alt="Linux" src="https://img.shields.io/badge/desktop-Linux-ffb878">
+  <img alt="Rust" src="https://img.shields.io/badge/fatto%20in-Rust-ffb878">
+</p>
+
+<p align="center">🇬🇧 <a href="README.md">Read it in English</a></p>
+
+**Per partire in fretta:** [flasha la scheda dal browser](https://gabritech14.github.io/cyd-deck/) → [installa il programma per il PC](#per-partire) → apri l'editor e segui la breve guida.
 
 Volevo uno Stream Deck ma non volevo pagarlo, così me lo sono costruito con una scheda ESP32 da una ventina
 di euro con uno schermo touch da 2,8". Alla fine è diventato qualcosa di più di una griglia di tasti: pagine
@@ -31,23 +47,25 @@ mi aiuta a capire da dove partire.
 
 ## Per partire
 
-Flash del firmware. Il modo più semplice è il **[web flasher](https://gabritech14.github.io/cyd-deck/)**:
+**1. Flash del firmware.** Il modo più semplice è il **[web flasher](https://gabritech14.github.io/cyd-deck/)**:
 collega la scheda, apri la pagina in Chrome o Edge, clicca installa. Niente da configurare.
 
 Se preferisci compilarlo tu:
 
 ```sh
+git clone https://github.com/Gabritech14/cyd-deck.git && cd cyd-deck
 cargo install espup espflash
 espup install
 . ~/export-esp.sh
-cd firmware && cargo run --release
+cd firmware && cargo run --release && cd ..
 ```
 
 Se il flash non parte: tieni premuto BOOT, premi RESET, lascia BOOT.
 
-Poi la parte sul PC:
+**2. Installa il programma per il PC** (dalla cartella scaricata):
 
 ```sh
+git clone https://github.com/Gabritech14/cyd-deck.git && cd cyd-deck   # se non l'hai già fatto
 cargo install --path host
 cyd-deck            # programma in background che comanda il deck
 cyd-deck gui        # l'editor
