@@ -60,6 +60,8 @@ fn main() -> ExitCode {
         };
     }
     let cfg_path = config::config_path();
+    // Lingua del sistema per la prima config; poi vale quella scelta nella config.
+    i18n::set("auto");
     if let Err(e) = config::ensure_exists(&cfg_path) {
         eprintln!("{}", tr!("impossibile creare la config: {}", format!("{e:#}")));
         return ExitCode::FAILURE;
@@ -84,7 +86,7 @@ fn main() -> ExitCode {
             Ok(())
         }
         _ => {
-            println!("{USAGE}");
+            println!("{}", i18n::t(USAGE));
             Ok(())
         }
     };

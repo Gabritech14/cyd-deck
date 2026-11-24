@@ -2188,7 +2188,7 @@ impl Editor {
         // Le pagine cambiano solo lasciando quel passo, così si può tornare indietro e cambiare idea.
         if step == 3 && next != Some(3) {
             match self.intro_pages {
-                1 => self.cfg.pages = sample_pages(self.scheme_path.exists()),
+                1 => self.cfg.pages = config::sample_pages(self.scheme_path.exists()),
                 2 => self.cfg.pages = vec![Page { name: tr!("Principale").into(), ..Page::default() }],
                 _ => {}
             }
@@ -2460,27 +2460,6 @@ fn theme_picker(ui: &mut egui::Ui, th: &mut config::ThemeCfg, scheme: &Path, now
     });
 }
 
-/// Pagine della config d'esempio nella lingua attuale (senza quella di Caelestia se manca).
-fn sample_pages(caelestia: bool) -> Vec<Page> {
-    let def: Config = toml::from_str(config::DEFAULT_CONFIG).unwrap_or_default();
-    let mut pages: Vec<Page> = def.pages.into_iter().filter(|p| caelestia || p.name != "Caelestia").collect();
-    let renames: Vec<(String, String)> = pages.iter().map(|p| (p.name.clone(), crate::i18n::t(&p.name).to_string())).collect();
-    for p in &mut pages {
-        p.name = crate::i18n::t(&p.name).to_string();
-        for k in &mut p.keys {
-            if let Some(l) = &mut k.label {
-                *l = crate::i18n::t(l).to_string();
-            }
-            // I tasti "vai alla pagina" seguono il nome tradotto.
-            if let Some(target) = k.action.as_deref().and_then(|a| a.strip_prefix("page:")) {
-                if let Some((_, new)) = renames.iter().find(|(old, _)| old == target) {
-                    k.action = Some(format!("page:{new}"));
-                }
-            }
-        }
-    }
-    pages
-}
 
 /// Il programma in background (`cyd-deck` o `cyd-deck run`) è in esecuzione?
 fn daemon_running() -> bool {

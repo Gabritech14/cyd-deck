@@ -184,7 +184,7 @@ exec = "foot"
 [[page.key]]
 icon = "public"
 label = "Browser"
-exec = "zen-browser"
+exec = "sh -c 'gtk-launch \"$(xdg-settings get default-web-browser)\"'"
 
 [[page.key]]
 icon = "folder"

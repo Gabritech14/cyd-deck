@@ -487,25 +487,69 @@ fn xdg_dir(var: &str, fallback: &str) -> PathBuf {
 }
 
 /// Scrive la config di default se non esiste ancora.
+/// Pagine della config d'esempio nella lingua attuale. Senza Caelestia la sua pagina sparisce,
+/// i tasti della musica passano a playerctl e quelli che servono solo a Caelestia restano vuoti.
+pub fn sample_pages(caelestia: bool) -> Vec<Page> {
+    let def: Config = toml::from_str(DEFAULT_CONFIG).unwrap_or_default();
+    let mut pages: Vec<Page> = def.pages.into_iter().filter(|p| caelestia || p.name != "Caelestia").collect();
+    let renames: Vec<(String, String)> = pages.iter().map(|p| (p.name.clone(), crate::i18n::t(&p.name).to_string())).collect();
+    let first = renames.first().map(|(_, n)| n.clone()).unwrap_or_default();
+    for p in &mut pages {
+        p.name = crate::i18n::t(&p.name).to_string();
+        for k in &mut p.keys {
+            if !caelestia {
+                if let Some(exec) = k.exec.clone().filter(|e| e.starts_with("caelestia")) {
+                    let player = match exec.as_str() {
+                        "caelestia shell mpris previous" => Some("playerctl previous"),
+                        "caelestia shell mpris playPause" => Some("playerctl play-pause"),
+                        "caelestia shell mpris next" => Some("playerctl next"),
+                        _ => None,
+                    };
+                    match player {
+                        Some(cmd) => k.exec = Some(cmd.into()),
+                        None => *k = Key::default(),
+                    }
+                }
+            }
+            if let Some(l) = &mut k.label {
+                *l = crate::i18n::t(l).to_string();
+            }
+            // I tasti "vai alla pagina" seguono il nome tradotto (o la prima pagina, se la loro non c'è).
+            if let Some(target) = k.action.as_deref().and_then(|a| a.strip_prefix("page:")) {
+                let new = renames.iter().find(|(old, _)| old == target).map_or(first.clone(), |(_, n)| n.clone());
+                k.action = Some(format!("page:{new}"));
+            }
+        }
+    }
+    pages
+}
+
 pub fn ensure_exists(path: &Path) -> Result<()> {
     if !path.exists() {
         if let Some(dir) = path.parent() {
             std::fs::create_dir_all(dir)?;
         }
-        std::fs::write(path, DEFAULT_CONFIG)?;
+        let caelestia = scheme_path().exists();
+        if caelestia && !crate::i18n::english() {
+            // Il file d'esempio così com'è, con i suoi commenti.
+            std::fs::write(path, DEFAULT_CONFIG)?;
+        } else {
+            let mut cfg: Config = toml::from_str(DEFAULT_CONFIG)?;
+            cfg.pages = sample_pages(caelestia);
+            save(path, &cfg)?;
+        }
         eprintln!("{}", tr!("creata config di default in {}", path.display()));
     }
     Ok(())
 }
 
 const SAVED_HEADER: &str = "\
-# cyd-deck - configurazione del macropad (scritta dall'editor: `cyd-deck gui`)
-# Il file viene ricaricato automaticamente quando lo salvi.
-# Campi di un tasto: icon, icon_active, label, exec, action, state, label_cmd.
-# action: next-page | prev-page | page:<nome> | backlight-off | reload
+# CYD Deck - config (written by the editor / scritta dall'editor: `cyd-deck gui`)
+# Reloaded automatically on save / ricaricata a ogni salvataggio.
+# Key fields / campi di un tasto: icon, icon_active, label, exec, action, state, label_cmd.
+# action: next-page | prev-page | page:<name> | backlight-off | reload
 
 ";
-
 /// Salva la config; al primo salvataggio tiene una copia dell'originale in config.toml.bak.
 pub fn save(path: &Path, cfg: &Config) -> Result<()> {
     let mut cfg = cfg.clone();
@@ -590,6 +634,29 @@ pub fn write_touch(path: &Path, t: &Touch) -> Result<bool> {
     }
     std::fs::write(path, out.join("\n") + "\n")?;
     Ok(true)
+}
+
+#[cfg(test)]
+mod sample_tests {
+    use super::*;
+
+    #[test]
+    fn sample_pages_work_without_caelestia() {
+        for (caelestia, english) in [(false, false), (false, true), (true, true)] {
+            crate::i18n::TEST_ENGLISH.with(|c| c.set(Some(english)));
+            let pages = sample_pages(caelestia);
+            assert!(!pages.is_empty());
+            let names: Vec<&str> = pages.iter().map(|p| p.name.as_str()).collect();
+            for k in pages.iter().flat_map(|p| &p.keys) {
+                if !caelestia {
+                    assert!(!k.exec.as_deref().unwrap_or("").contains("caelestia"), "{:?}", k.exec);
+                }
+                if let Some(target) = k.action.as_deref().and_then(|a| a.strip_prefix("page:")) {
+                    assert!(names.contains(&target), "pagina {target} non esiste in {names:?}");
+                }
+            }
+        }
+    }
 }
 
 #[cfg(test)]

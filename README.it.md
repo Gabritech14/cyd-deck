@@ -43,7 +43,7 @@ mi aiuta a capire da dove partire.
 - il case stampato in 3D (link MakerWorld in arrivo)
 - sul PC: Rust, i font **Material Symbols Rounded** e **Rubik**, `fc-match`.
   `wpctl` (PipeWire) e `playerctl` per l'audio, Hyprland per le pagine che seguono l'app in primo piano.
-  Caelestia è un bel di più, non è obbligatorio.
+  Caelestia è un extra comodo, non è obbligatorio.
 
 ## Per partire
 
