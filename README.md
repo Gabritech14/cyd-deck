@@ -30,7 +30,10 @@ for, it helps me decide what to do first.
 
 ## Getting it running
 
-Flash the firmware:
+Flash the firmware. The easy way is the **[web flasher](https://gabritech14.github.io/cyd-deck/)**:
+plug the board in, open the page in Chrome or Edge, click install. Nothing to set up.
+
+If you'd rather build it yourself:
 
 ```sh
 cargo install espup espflash

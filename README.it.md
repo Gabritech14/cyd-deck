@@ -31,7 +31,10 @@ mi aiuta a capire da dove partire.
 
 ## Per partire
 
-Flash del firmware:
+Flash del firmware. Il modo più semplice è il **[web flasher](https://gabritech14.github.io/cyd-deck/)**:
+collega la scheda, apri la pagina in Chrome o Edge, clicca installa. Niente da configurare.
+
+Se preferisci compilarlo tu:
 
 ```sh
 cargo install espup espflash

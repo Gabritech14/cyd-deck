@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CYD Deck Flasher</title>
+<meta name="description" content="Flash the CYD Deck firmware on a Freenove ESP32-S3 2.8&quot; board straight from your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap">
+<script type="module" src="https://unpkg.com/esp-web-tools@10.5.2/dist/web/install-button.js?module"></script>
+<style>
+  :root {
+    --bg: #18120e;
+    --card: #241e1a;
+    --card-2: #2f2924;
+    --text: #ece0d9;
+    --muted: #b9a89b;
+    --accent: #ffb878;
+    --on-accent: #4c2700;
+    --line: #52443a;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #fff8f4; --card: #f6ebe3; --card-2: #efe0d5; --text: #2a1d14;
+      --muted: #6b5848; --accent: #8f4c00; --on-accent: #ffffff; --line: #d8c3b4;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.6 "Rubik", system-ui, sans-serif;
+  }
+  main { max-width: 720px; margin: 0 auto; padding: 48px 16px 64px; }
+  header { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+  .logo {
+    width: 52px; height: 52px; border-radius: 14px; background: var(--card-2);
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px; flex: none;
+  }
+  .logo span { border-radius: 3px; background: var(--line); }
+  .logo span:nth-child(5) { background: var(--accent); }
+  h1 { font-size: 2rem; margin: 0; letter-spacing: -0.01em; }
+  .tag { color: var(--muted); margin: 0 0 32px; }
+  .lang { margin-left: auto; display: flex; gap: 4px; }
+  .lang button {
+    font: inherit; font-size: 0.85rem; padding: 4px 10px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--line); background: transparent; color: var(--muted);
+  }
+  .lang button[aria-pressed="true"] { background: var(--card-2); color: var(--text); }
+  .card { background: var(--card); border-radius: 20px; padding: 24px; margin-bottom: 16px; }
+  .install { text-align: center; padding: 32px 24px; }
+  .install p { margin: 12px 0 0; color: var(--muted); font-size: 0.9rem; }
+  esp-web-install-button button[slot="activate"], .btn {
+    font: inherit; font-weight: 500; font-size: 1.1rem; border: 0; cursor: pointer;
+    background: var(--accent); color: var(--on-accent); padding: 14px 32px; border-radius: 999px;
+  }
+  .warn { background: var(--card-2); border-radius: 14px; padding: 14px 16px; color: var(--text); }
+  ol { padding-left: 1.3em; margin: 0; }
+  li { margin: 6px 0; }
+  h2 { font-size: 1.15rem; margin: 0 0 12px; }
+  code { background: var(--card-2); padding: 1px 6px; border-radius: 6px; font-size: 0.9em; }
+  a { color: var(--accent); }
+  footer { text-align: center; color: var(--muted); margin-top: 32px; font-size: 0.9rem; }
+  [data-lang="it"] .en, [data-lang="en"] .it { display: none; }
+</style>
+</head>
+<body data-lang="en">
+<main>
+  <header>
+    <div class="logo" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <h1>CYD Deck</h1>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-set="en" aria-pressed="true">EN</button>
+      <button type="button" data-set="it" aria-pressed="false">IT</button>
+    </div>
+  </header>
+  <p class="tag">
+    <span class="en">Web flasher for the Freenove ESP32-S3 2.8" board (FNK0104). Firmware v0.2.0.</span>
+    <span class="it">Flash dal browser per la scheda Freenove ESP32-S3 2.8" (FNK0104). Firmware v0.2.0.</span>
+  </p>
+
+  <section class="card install">
+    <esp-web-install-button manifest="manifest.json">
+      <button slot="activate">
+        <span class="en">Connect &amp; install</span><span class="it">Collega e installa</span>
+      </button>
+      <div slot="unsupported" class="warn">
+        <span class="en">Your browser can't talk to USB devices. Use Chrome, Edge or another Chromium-based browser on a computer (Firefox and Safari don't support Web Serial).</span>
+        <span class="it">Il tuo browser non può parlare con i dispositivi USB. Usa Chrome, Edge o un altro browser basato su Chromium da computer (Firefox e Safari non supportano Web Serial).</span>
+      </div>
+      <div slot="not-allowed" class="warn">
+        <span class="en">This page has to be opened over HTTPS.</span>
+        <span class="it">Questa pagina va aperta in HTTPS.</span>
+      </div>
+    </esp-web-install-button>
+    <p>
+      <span class="en">Nothing to install on your computer: everything happens in the browser.</span>
+      <span class="it">Non devi installare niente sul computer: fa tutto il browser.</span>
+    </p>
+  </section>
+
+  <section class="card">
+    <h2><span class="en">How it works</span><span class="it">Come si fa</span></h2>
+    <ol class="en">
+      <li>Plug the board into your computer with a USB-C cable that carries data (some cables only charge).</li>
+      <li>Click <b>Connect &amp; install</b> and pick the board from the list (usually "USB JTAG/serial debug unit").</li>
+      <li>On a first install, say yes to erasing the device. When updating, leave it unticked to keep your Wi-Fi settings.</li>
+      <li>Wait for it to finish (about a minute). The screen shows an empty grid: it's waiting for the PC.</li>
+      <li>Install the desktop app and run it: see the <a href="https://github.com/Gabritech14/cyd-deck#getting-it-running">README</a>.</li>
+    </ol>
+    <ol class="it">
+      <li>Collega la scheda al computer con un cavo USB-C che porti anche i dati (alcuni cavi caricano soltanto).</li>
+      <li>Clicca <b>Collega e installa</b> e scegli la scheda dall'elenco (di solito "USB JTAG/serial debug unit").</li>
+      <li>Alla prima installazione accetta di cancellare il dispositivo. Per un aggiornamento lascialo vuoto, così tieni le impostazioni del Wi-Fi.</li>
+      <li>Aspetta che finisca (circa un minuto). Sullo schermo compare una griglia vuota: è in attesa del PC.</li>
+      <li>Installa il programma per il PC e avvialo: trovi tutto nel <a href="https://github.com/Gabritech14/cyd-deck/blob/main/README.it.md#per-partire">README</a>.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2><span class="en">If the board isn't found</span><span class="it">Se la scheda non si trova</span></h2>
+    <ol class="en">
+      <li>Hold <b>BOOT</b>, press and release <b>RESET</b>, then let go of BOOT, and try again.</li>
+      <li>On Linux your user needs access to the serial port: group <code>uucp</code> (Arch) or <code>dialout</code> (Debian/Ubuntu), then log out and back in.</li>
+      <li>Close anything else using the port, including the CYD Deck app itself.</li>
+    </ol>
+    <ol class="it">
+      <li>Tieni premuto <b>BOOT</b>, premi e rilascia <b>RESET</b>, poi lascia BOOT e riprova.</li>
+      <li>Su Linux il tuo utente deve poter usare la porta seriale: gruppo <code>uucp</code> (Arch) o <code>dialout</code> (Debian/Ubuntu), poi esci e rientra.</li>
+      <li>Chiudi tutto quello che usa la porta, compreso il programma CYD Deck.</li>
+    </ol>
+  </section>
+
+  <footer>
+    <a href="https://github.com/Gabritech14/cyd-deck">GitHub</a> · MIT ·
+    <span class="en">flashing powered by</span><span class="it">flash con</span>
+    <a href="https://esphome.github.io/esp-web-tools/">ESP Web Tools</a>
+    <br><b>With love by gabritech</b> ❤️
+  </footer>
+</main>
+<script>
+  const setLang = (lang) => {
+    document.body.dataset.lang = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll(".lang button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.set === lang)));
+    try { localStorage.setItem("lang", lang); } catch (e) {}
+  };
+  let saved = null;
+  try { saved = localStorage.getItem("lang"); } catch (e) {}
+  const browserLang = (navigator.language || "").toLowerCase().startsWith("it") ? "it" : "en";
+  setLang(saved === "it" || saved === "en" ? saved : browserLang);
+  document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.set)));
+</script>
+</body>
+</html>
