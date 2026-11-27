@@ -41,7 +41,7 @@ pub fn draw(c: &mut Canvas, fonts: &Fonts, t: &Theme, bar: &Bar, height: u32, in
     let fg = t.on_surface_variant;
     let mut x = w as f32 - 10.0;
 
-    if bar.battery {
+    if bar.battery && crate::app::BATTERY {
         if let Some(p) = info.battery {
             let col = if p <= 15 && !info.charging { t.error } else { fg };
             let text = format!("{p}%");

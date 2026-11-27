@@ -23,12 +23,21 @@ jobs:
       - name: System libraries
         run: sudo apt-get update && sudo apt-get install -y libudev-dev pkg-config mesa-vulkan-drivers  # Mesa: GPU software per i test dell editor
       - uses: dtolnay/rust-toolchain@stable
+      # Un tag con "beta" (es. v0.4.0-beta) compila la beta, con l'indicatore della batteria.
+      - name: Stable or beta
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          case "$TAG" in
+            *beta*) echo "FEATURES=--features battery" >> "$GITHUB_ENV"; echo "APPIMAGE_SUFFIX=-beta" >> "$GITHUB_ENV" ;;
+            *) echo "FEATURES=" >> "$GITHUB_ENV"; echo "APPIMAGE_SUFFIX=" >> "$GITHUB_ENV" ;;
+          esac
       - name: Build
         working-directory: host
-        run: cargo build --release --locked
+        run: cargo build --release --locked $FEATURES
       - name: Test
         working-directory: host
-        run: cargo test --release --locked
+        run: cargo test --release --locked $FEATURES
       - name: AppImage
         run: |
           mkdir -p dist

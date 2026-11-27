@@ -1,9 +1,13 @@
 [package]
 name = "cyd-deck"
-version = "0.3.1"
+version = "0.3.2"
 edition = "2024"
 description = "Desktop app for CYD Deck: turns a Freenove ESP32-S3 2.8\" touch display into a macropad"
 license = "MIT"
+
+[features]
+# Indicatore della batteria del deck (barra in alto, tasti {battery}): per ora solo nella beta.
+battery = []
 
 [dependencies]
 ab_glyph = "0.2.32"

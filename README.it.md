@@ -16,6 +16,8 @@ Un macropad touch open source stile Stream Deck per la scheda Freenove ESP32-S3 
 
 <p align="center">🇬🇧 <a href="README.md">Read it in English</a></p>
 
+<p align="center"><img src="media/deck-front.jpg" alt="CYD Deck sulla mia scrivania, nel suo case stampato in 3D" width="520"></p>
+
 **Per partire in fretta:** [flasha la scheda dal browser](https://gabritech14.github.io/cyd-deck/) → [scarica il programma per il PC (AppImage)](https://github.com/Gabritech14/cyd-deck/releases/latest) → apri l'editor e segui la breve guida.
 
 Volevo uno Stream Deck ma non volevo pagarlo, così me lo sono costruito con una scheda ESP32 da una ventina
@@ -155,8 +157,12 @@ nmcli connection add type wifi ifname wlan0 con-name cyd-hotspot autoconnect yes
 sudo ufw allow in on wlan0     # solo se usi ufw, altrimenti la scheda non riceve l'indirizzo
 ```
 
-Con la scheda può parlare un solo programma alla volta. La batteria la ricarica la scheda da sola;
-un tasto con `{battery}` come icona o etichetta mostra il livello.
+Con la scheda può parlare un solo programma alla volta. La batteria la ricarica la scheda da sola.
+
+**Indicatore della batteria (beta):** il livello della batteria nella barra in alto e nei tasti `{battery}`
+per ora c'è solo nella versione **beta** (`CYD_Deck-…-beta-x86_64.AppImage`, oppure compila con
+`cargo install --path host --features battery`), finché non sono sicuro che le letture siano giuste anche su
+altre schede. La versione stabile è uguale, solo senza.
 
 ## Note sulla sicurezza
 

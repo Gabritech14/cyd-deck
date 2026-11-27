@@ -92,10 +92,16 @@ pub fn battery_icon(percent: Option<u8>, charging: bool) -> &'static str {
     }
 }
 
+/// Indicatore della batteria del deck: c'è solo nella beta (feature "battery").
+pub const BATTERY: bool = cfg!(feature = "battery");
+
 /// Sostituisce `{battery}` in etichette e icone dei tasti.
 pub fn expand(text: &str, percent: Option<u8>, charging: bool, icon: bool) -> String {
     if !text.contains("{battery}") {
         return text.to_string();
+    }
+    if !BATTERY {
+        return if icon { String::new() } else { text.replace("{battery}", "") };
     }
     if icon {
         return battery_icon(percent, charging).to_string();
@@ -1598,6 +1604,9 @@ impl App {
 impl App {
     /// Percentuale (None se la scheda non ha batteria o non la riporta) e se è sotto carica.
     fn battery(&self) -> (Option<u8>, bool) {
+        if !BATTERY {
+            return (None, false);
+        }
         // Sotto 2,5 V il partitore non vede una batteria: alimentazione solo da USB.
         if self.battery_mv <= 2500 {
             return (None, false);
@@ -1663,6 +1672,13 @@ mod tests {
         assert_eq!((battery_percent(3000), battery_percent(4200)), (0, 100));
         assert_eq!(battery_percent(3800), 52);
         assert!(battery_percent(3950) > battery_percent(3850));
+        assert_eq!(expand("volume_up", Some(52), true, true), "volume_up");
+        if !BATTERY {
+            // Versione stabile: niente batteria, i segnaposto restano vuoti.
+            assert_eq!(expand("Deck {battery}", Some(52), false, false), "Deck ");
+            assert_eq!(expand("{battery}", Some(52), false, true), "");
+            return;
+        }
         assert_eq!(expand("{battery}", Some(52), false, false), "52%");
         assert_eq!(expand("Deck {battery}", None, false, false), "Deck --");
         assert_eq!(expand("{battery}", Some(52), false, true), "battery_4_bar");

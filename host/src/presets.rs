@@ -501,7 +501,12 @@ pub fn plugins_dir(cfg_path: &Path) -> PathBuf {
 
 /// Preset integrati più i plugin in `dir/*.toml`; i file illeggibili finiscono negli errori.
 pub fn catalog(dir: &Path) -> (Vec<Plugin>, Vec<String>) {
-    let mut out: Vec<Plugin> = GROUPS.iter().flat_map(|g| g.presets.iter().map(move |p| Plugin::from((g, p)))).collect();
+    let mut out: Vec<Plugin> = GROUPS
+        .iter()
+        .flat_map(|g| g.presets.iter().map(move |p| Plugin::from((g, p))))
+        // La batteria del deck c'è solo nella beta.
+        .filter(|p| crate::app::BATTERY || !p.icon.contains("{battery}"))
+        .collect();
     let mut errors = Vec::new();
     let mut files: Vec<PathBuf> = std::fs::read_dir(dir)
         .map(|rd| rd.flatten().map(|e| e.path()).filter(|p| p.extension().is_some_and(|e| e == "toml")).collect())

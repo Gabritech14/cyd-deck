@@ -9,6 +9,8 @@ OUT=$(readlink -f "${2:-.}")
 HERE=$(dirname "$(readlink -f "$0")")
 HOST=$(dirname "$HERE")
 VERSION=$(sed -n 's/^version = "\(.*\)"/\1/p' "$HOST/Cargo.toml" | head -1)
+# APPIMAGE_SUFFIX=-beta per la versione beta (con l'indicatore della batteria).
+VERSION="$VERSION${APPIMAGE_SUFFIX:-}"
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
 

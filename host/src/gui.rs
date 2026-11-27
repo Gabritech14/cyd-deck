@@ -407,7 +407,7 @@ impl Editor {
     fn draw_bar(&self, c: &mut Canvas) {
         let page = self.cfg.pages.get(self.page).map(|p| p.name.as_str()).unwrap_or_default();
         let link = if self.cfg.wifi.enabled() { device::Link::Wifi } else { device::Link::Usb };
-        let info = bar::Info { page, clock: &self.clock, battery: Some(80), charging: false, link: Some(link) };
+        let info = bar::Info { page, clock: &self.clock, battery: app::BATTERY.then_some(80), charging: false, link: Some(link) };
         bar::draw(c, &self.fonts, &self.theme, &self.cfg.bar, config::bar_height(&self.cfg), &info);
     }
 
@@ -2324,7 +2324,9 @@ impl Editor {
                     ui.checkbox(&mut c.bar.page, tr!("Nome pagina"));
                     ui.checkbox(&mut c.bar.clock, tr!("Ora"));
                     ui.checkbox(&mut c.bar.link, tr!("USB / Wi-Fi"));
-                    ui.checkbox(&mut c.bar.battery, tr!("Batteria"));
+                    if app::BATTERY {
+                        ui.checkbox(&mut c.bar.battery, tr!("Batteria"));
+                    }
                 });
             });
             ui.add_space(14.0);
