@@ -18,7 +18,7 @@ no glue.
 | 2 | **zip ties**, max 4 mm wide | hold the battery in its cradle |
 | 4 | adhesive rubber feet | optional, but the deck stops sliding around |
 | 1 | **USB-C cable that carries data** | some cables only charge: those won't work for flashing |
-| 1 | printed **shell** + **bottom plate** | [3D files on MakerWorld](#3d-files) |
+| 1 | printed **shell** + **bottom plate** | [3D files on MakerWorld](https://makerworld.com/models/3696002-cyd-deck-freenove-cyd-2-8-case) |
 
 Tools: a Phillips screwdriver and something to trim the zip ties.
 
@@ -108,7 +108,7 @@ risk.
 
 ## 3D files
 
-On MakerWorld: *link coming*. The parametric OpenSCAD source is published there too.
+**[CYD Deck case on MakerWorld](https://makerworld.com/models/3696002-cyd-deck-freenove-cyd-2-8-case)**: the Bambu Studio project with print settings, STL files and the parametric OpenSCAD source.
 
 ---
 

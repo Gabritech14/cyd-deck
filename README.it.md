@@ -46,7 +46,7 @@ Passo per passo, con le foto: **[guida al montaggio](guide/montaggio.md)** ([PDF
 - scheda Freenove FNK0104 e un cavo USB-C che porti anche i dati
 - un pacco batteria Li-ion 1S (formato 18650) **con circuito di protezione**, collegato al connettore della
   batteria della scheda (leggi prima [Sicurezza](#sicurezza)): il deck è pensato per andare senza fili
-- il case stampato in 3D (link MakerWorld in arrivo)
+- il case stampato in 3D: **[case CYD Deck su MakerWorld](https://makerworld.com/it/models/3696002-cyd-deck-freenove-cyd-2-8-case)**
 - sul PC: Linux (x86_64). `wpctl` (PipeWire) e `playerctl` per l'audio, Hyprland per le pagine che
   seguono l'app in primo piano. Caelestia è un extra comodo, non è obbligatorio.
 
@@ -253,7 +253,7 @@ Se ho dimenticato qualcuno apri una issue o una PR e ti aggiungo volentieri.
 
 ## Licenza
 
-Il codice (firmware e programma per il PC) è [MIT](LICENSE). Il case 3D è su MakerWorld con la sua licenza.
+Il codice (firmware e programma per il PC) è [MIT](LICENSE). Il case 3D è [su MakerWorld](https://makerworld.com/it/models/3696002-cyd-deck-freenove-cyd-2-8-case) con licenza CC BY-NC-SA 4.0.
 
 ## Marchi
 

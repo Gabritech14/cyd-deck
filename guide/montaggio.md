@@ -18,7 +18,7 @@ colla.
 | 2 | **fascette**, larghe al massimo 4 mm | tengono la batteria nella culla |
 | 4 | piedini adesivi in gomma | facoltativi, ma il deck non scivola più sulla scrivania |
 | 1 | **cavo USB-C che porti anche i dati** | alcuni cavi caricano soltanto: con quelli il flash non va |
-| 1 | **scocca** e **piastra inferiore** stampate | [file 3D su MakerWorld](#file-3d) |
+| 1 | **scocca** e **piastra inferiore** stampate | [file 3D su MakerWorld](https://makerworld.com/it/models/3696002-cyd-deck-freenove-cyd-2-8-case) |
 
 Attrezzi: un cacciavite a croce e qualcosa per tagliare le fascette.
 
@@ -111,7 +111,7 @@ Costruisci e usi il deck a tuo rischio.
 
 ## File 3D
 
-Su MakerWorld: *link in arrivo*. Lì c'è anche il sorgente OpenSCAD parametrico.
+**[Case CYD Deck su MakerWorld](https://makerworld.com/it/models/3696002-cyd-deck-freenove-cyd-2-8-case)**: il progetto Bambu Studio con le impostazioni di stampa, i file STL e il sorgente OpenSCAD parametrico.
 
 ---
 
