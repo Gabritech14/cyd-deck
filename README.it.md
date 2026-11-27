@@ -41,7 +41,8 @@ mi aiuta a capire da dove partire.
 ## Cosa serve
 
 - scheda Freenove FNK0104 e un cavo USB-C che porti anche i dati
-- facoltativa: una LiPo 1S con il connettore della scheda (leggi prima [Sicurezza](#sicurezza))
+- un pacco batteria Li-ion 1S (formato 18650) **con circuito di protezione**, collegato al connettore della
+  batteria della scheda (leggi prima [Sicurezza](#sicurezza)): il deck è pensato per andare senza fili
 - il case stampato in 3D (link MakerWorld in arrivo)
 - sul PC: Linux (x86_64). `wpctl` (PipeWire) e `playerctl` per l'audio, Hyprland per le pagine che
   seguono l'app in primo piano. Caelestia è un extra comodo, non è obbligatorio.

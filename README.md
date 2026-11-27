@@ -40,7 +40,8 @@ for, it helps me decide what to do first.
 ## What you need
 
 - Freenove FNK0104 board and a USB-C cable that carries data
-- optional: a 1S LiPo with the board's connector (read [Safety](#safety) first)
+- a 1S Li-ion battery pack (18650 size) **with a protection circuit**, wired to the board's battery connector
+  (read [Safety](#safety) first): the deck is meant to run wireless
 - the 3D printed case (MakerWorld link coming)
 - on the PC: Linux (x86_64). `wpctl` (PipeWire) and `playerctl` for the audio stuff, Hyprland for pages
   that follow the focused app. Caelestia is a nice extra, not a requirement.
