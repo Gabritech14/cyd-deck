@@ -39,6 +39,9 @@ for, it helps me decide what to do first.
 
 ## What you need
 
+Step by step, with photos: **[assembly guide](guide/assembly.md)**.
+
+
 - Freenove FNK0104 board and a USB-C cable that carries data
 - a 1S Li-ion battery pack (18650 size) **with a protection circuit**, wired to the board's battery connector
   (read [Safety](#safety) first): the deck is meant to run wireless

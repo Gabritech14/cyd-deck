@@ -40,6 +40,9 @@ mi aiuta a capire da dove partire.
 
 ## Cosa serve
 
+Passo per passo, con le foto: **[guida al montaggio](guide/montaggio.md)**.
+
+
 - scheda Freenove FNK0104 e un cavo USB-C che porti anche i dati
 - un pacco batteria Li-ion 1S (formato 18650) **con circuito di protezione**, collegato al connettore della
   batteria della scheda (leggi prima [Sicurezza](#sicurezza)): il deck è pensato per andare senza fili
