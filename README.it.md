@@ -40,7 +40,7 @@ mi aiuta a capire da dove partire.
 
 ## Cosa serve
 
-Passo per passo, con le foto: **[guida al montaggio](guide/montaggio.md)**.
+Passo per passo, con le foto: **[guida al montaggio](guide/montaggio.md)** ([PDF](guide/CYD-Deck-guida-montaggio.pdf)).
 
 
 - scheda Freenove FNK0104 e un cavo USB-C che porti anche i dati

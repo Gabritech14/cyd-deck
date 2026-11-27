@@ -39,7 +39,7 @@ for, it helps me decide what to do first.
 
 ## What you need
 
-Step by step, with photos: **[assembly guide](guide/assembly.md)**.
+Step by step, with photos: **[assembly guide](guide/assembly.md)** ([PDF](guide/CYD-Deck-assembly-guide.pdf)).
 
 
 - Freenove FNK0104 board and a USB-C cable that carries data
